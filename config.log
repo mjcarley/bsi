@@ -53,39 +53,39 @@ PATH: .
 ## Core tests. ##
 ## ----------- ##
 
-configure:2306: checking for a BSD-compatible install
-configure:2374: result: /usr/bin/ginstall -c
-configure:2385: checking whether build environment is sane
-configure:2440: result: yes
-configure:2591: checking for a thread-safe mkdir -p
-configure:2630: result: /usr/bin/mkdir -p
-configure:2637: checking for gawk
-configure:2653: found /usr/bin/gawk
-configure:2664: result: gawk
-configure:2675: checking whether make sets $(MAKE)
-configure:2697: result: yes
-configure:2726: checking whether make supports nested variables
-configure:2743: result: yes
-configure:2924: checking build system type
-configure:2938: result: x86_64-unknown-linux-gnu
-configure:2958: checking host system type
-configure:2971: result: x86_64-unknown-linux-gnu
-configure:3012: checking how to print strings
-configure:3039: result: printf
-configure:3072: checking for style of include used by make
-configure:3100: result: GNU
-configure:3171: checking for gcc
-configure:3187: found /usr/bin/gcc
-configure:3198: result: gcc
-configure:3427: checking for C compiler version
-configure:3436: gcc --version >&5
+configure:2309: checking for a BSD-compatible install
+configure:2377: result: /usr/bin/ginstall -c
+configure:2388: checking whether build environment is sane
+configure:2443: result: yes
+configure:2594: checking for a thread-safe mkdir -p
+configure:2633: result: /usr/bin/mkdir -p
+configure:2640: checking for gawk
+configure:2656: found /usr/bin/gawk
+configure:2667: result: gawk
+configure:2678: checking whether make sets $(MAKE)
+configure:2700: result: yes
+configure:2729: checking whether make supports nested variables
+configure:2746: result: yes
+configure:2927: checking build system type
+configure:2941: result: x86_64-unknown-linux-gnu
+configure:2961: checking host system type
+configure:2974: result: x86_64-unknown-linux-gnu
+configure:3015: checking how to print strings
+configure:3042: result: printf
+configure:3075: checking for style of include used by make
+configure:3103: result: GNU
+configure:3174: checking for gcc
+configure:3190: found /usr/bin/gcc
+configure:3201: result: gcc
+configure:3430: checking for C compiler version
+configure:3439: gcc --version >&5
 gcc (GCC) 5.5.0
 Copyright (C) 2015 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-configure:3447: $? = 0
-configure:3436: gcc -v >&5
+configure:3450: $? = 0
+configure:3439: gcc -v >&5
 Reading specs from /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/specs
 COLLECT_GCC=gcc
 COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-slackware-linux/5.5.0/lto-wrapper
@@ -93,145 +93,145 @@ Target: x86_64-slackware-linux
 Configured with: ../gcc-5.5.0/configure --prefix=/usr --libdir=/usr/lib64 --mandir=/usr/man --infodir=/usr/info --enable-shared --enable-bootstrap --enable-languages=ada,c,c++,fortran,go,java,lto,objc --enable-threads=posix --enable-checking=release --enable-objc-gc --with-system-zlib --with-python-dir=/lib64/python2.7/site-packages --enable-libstdcxx-dual-abi --with-default-libstdcxx-abi=gcc4-compatible --disable-libunwind-exceptions --enable-__cxa_atexit --enable-libssp --enable-lto --disable-install-libiberty --with-gnu-ld --verbose --enable-java-home --with-java-home=/usr/lib64/jvm/jre --with-jvm-root-dir=/usr/lib64/jvm --with-jvm-jar-dir=/usr/lib64/jvm/jvm-exports --with-arch-directory=amd64 --with-antlr-jar=/tmp/slackware64-14.2/gcc/antlr-runtime-3.4.jar --enable-java-awt=gtk --disable-gtktest --disable-multilib --target=x86_64-slackware-linux --build=x86_64-slackware-linux --host=x86_64-slackware-linux
 Thread model: posix
 gcc version 5.5.0 (GCC) 
-configure:3447: $? = 0
-configure:3436: gcc -V >&5
+configure:3450: $? = 0
+configure:3439: gcc -V >&5
 gcc: error: unrecognized command line option '-V'
 gcc: fatal error: no input files
 compilation terminated.
-configure:3447: $? = 1
-configure:3436: gcc -qversion >&5
+configure:3450: $? = 1
+configure:3439: gcc -qversion >&5
 gcc: error: unrecognized command line option '-qversion'
 gcc: fatal error: no input files
 compilation terminated.
-configure:3447: $? = 1
-configure:3467: checking whether the C compiler works
-configure:3489: gcc    conftest.c  >&5
-configure:3493: $? = 0
-configure:3541: result: yes
-configure:3544: checking for C compiler default output file name
-configure:3546: result: a.out
-configure:3552: checking for suffix of executables
-configure:3559: gcc -o conftest    conftest.c  >&5
-configure:3563: $? = 0
-configure:3585: result: 
-configure:3607: checking whether we are cross compiling
-configure:3615: gcc -o conftest    conftest.c  >&5
-configure:3619: $? = 0
-configure:3626: ./conftest
-configure:3630: $? = 0
-configure:3645: result: no
-configure:3650: checking for suffix of object files
-configure:3672: gcc -c   conftest.c >&5
-configure:3676: $? = 0
-configure:3697: result: o
-configure:3701: checking whether we are using the GNU C compiler
-configure:3720: gcc -c   conftest.c >&5
-configure:3720: $? = 0
-configure:3729: result: yes
-configure:3738: checking whether gcc accepts -g
-configure:3758: gcc -c -g  conftest.c >&5
-configure:3758: $? = 0
-configure:3799: result: yes
-configure:3816: checking for gcc option to accept ISO C89
-configure:3879: gcc  -c -g -O2  conftest.c >&5
-configure:3879: $? = 0
-configure:3892: result: none needed
-configure:3917: checking whether gcc understands -c and -o together
-configure:3939: gcc -c conftest.c -o conftest2.o
-configure:3942: $? = 0
-configure:3939: gcc -c conftest.c -o conftest2.o
-configure:3942: $? = 0
-configure:3954: result: yes
-configure:3973: checking dependency style of gcc
-configure:4084: result: gcc3
-configure:4099: checking for a sed that does not truncate output
-configure:4163: result: /usr/bin/sed
-configure:4181: checking for grep that handles long lines and -e
-configure:4239: result: /usr/bin/grep
-configure:4244: checking for egrep
-configure:4306: result: /usr/bin/grep -E
-configure:4311: checking for fgrep
-configure:4373: result: /usr/bin/grep -F
-configure:4408: checking for ld used by gcc
-configure:4475: result: /usr/x86_64-slackware-linux/bin/ld
-configure:4482: checking if the linker (/usr/x86_64-slackware-linux/bin/ld) is GNU ld
-configure:4497: result: yes
-configure:4509: checking for BSD- or MS-compatible name lister (nm)
-configure:4563: result: /usr/bin/nm -B
-configure:4693: checking the name lister (/usr/bin/nm -B) interface
-configure:4700: gcc -c -g -O2  conftest.c >&5
-configure:4703: /usr/bin/nm -B "conftest.o"
-configure:4706: output
+configure:3450: $? = 1
+configure:3470: checking whether the C compiler works
+configure:3492: gcc    conftest.c  >&5
+configure:3496: $? = 0
+configure:3544: result: yes
+configure:3547: checking for C compiler default output file name
+configure:3549: result: a.out
+configure:3555: checking for suffix of executables
+configure:3562: gcc -o conftest    conftest.c  >&5
+configure:3566: $? = 0
+configure:3588: result: 
+configure:3610: checking whether we are cross compiling
+configure:3618: gcc -o conftest    conftest.c  >&5
+configure:3622: $? = 0
+configure:3629: ./conftest
+configure:3633: $? = 0
+configure:3648: result: no
+configure:3653: checking for suffix of object files
+configure:3675: gcc -c   conftest.c >&5
+configure:3679: $? = 0
+configure:3700: result: o
+configure:3704: checking whether we are using the GNU C compiler
+configure:3723: gcc -c   conftest.c >&5
+configure:3723: $? = 0
+configure:3732: result: yes
+configure:3741: checking whether gcc accepts -g
+configure:3761: gcc -c -g  conftest.c >&5
+configure:3761: $? = 0
+configure:3802: result: yes
+configure:3819: checking for gcc option to accept ISO C89
+configure:3882: gcc  -c -g -O2  conftest.c >&5
+configure:3882: $? = 0
+configure:3895: result: none needed
+configure:3920: checking whether gcc understands -c and -o together
+configure:3942: gcc -c conftest.c -o conftest2.o
+configure:3945: $? = 0
+configure:3942: gcc -c conftest.c -o conftest2.o
+configure:3945: $? = 0
+configure:3957: result: yes
+configure:3976: checking dependency style of gcc
+configure:4087: result: gcc3
+configure:4102: checking for a sed that does not truncate output
+configure:4166: result: /usr/bin/sed
+configure:4184: checking for grep that handles long lines and -e
+configure:4242: result: /usr/bin/grep
+configure:4247: checking for egrep
+configure:4309: result: /usr/bin/grep -E
+configure:4314: checking for fgrep
+configure:4376: result: /usr/bin/grep -F
+configure:4411: checking for ld used by gcc
+configure:4478: result: /usr/x86_64-slackware-linux/bin/ld
+configure:4485: checking if the linker (/usr/x86_64-slackware-linux/bin/ld) is GNU ld
+configure:4500: result: yes
+configure:4512: checking for BSD- or MS-compatible name lister (nm)
+configure:4566: result: /usr/bin/nm -B
+configure:4696: checking the name lister (/usr/bin/nm -B) interface
+configure:4703: gcc -c -g -O2  conftest.c >&5
+configure:4706: /usr/bin/nm -B "conftest.o"
+configure:4709: output
 0000000000000000 B some_variable
-configure:4713: result: BSD nm
-configure:4716: checking whether ln -s works
-configure:4720: result: yes
-configure:4728: checking the maximum length of command line arguments
-configure:4859: result: 1572864
-configure:4907: checking how to convert x86_64-unknown-linux-gnu file names to x86_64-unknown-linux-gnu format
-configure:4947: result: func_convert_file_noop
-configure:4954: checking how to convert x86_64-unknown-linux-gnu file names to toolchain format
-configure:4974: result: func_convert_file_noop
-configure:4981: checking for /usr/x86_64-slackware-linux/bin/ld option to reload object files
-configure:4988: result: -r
-configure:5062: checking for objdump
-configure:5078: found /usr/bin/objdump
-configure:5089: result: objdump
-configure:5121: checking how to recognize dependent libraries
-configure:5321: result: pass_all
-configure:5406: checking for dlltool
-configure:5422: found /usr/bin/dlltool
-configure:5433: result: dlltool
-configure:5466: checking how to associate runtime and link libraries
-configure:5493: result: printf %s\n
-configure:5554: checking for ar
-configure:5570: found /usr/bin/ar
-configure:5581: result: ar
-configure:5618: checking for archiver @FILE support
-configure:5635: gcc -c -g -O2  conftest.c >&5
-configure:5635: $? = 0
-configure:5638: ar cru libconftest.a @conftest.lst >&5
-configure:5641: $? = 0
-configure:5646: ar cru libconftest.a @conftest.lst >&5
+configure:4716: result: BSD nm
+configure:4719: checking whether ln -s works
+configure:4723: result: yes
+configure:4731: checking the maximum length of command line arguments
+configure:4862: result: 1572864
+configure:4910: checking how to convert x86_64-unknown-linux-gnu file names to x86_64-unknown-linux-gnu format
+configure:4950: result: func_convert_file_noop
+configure:4957: checking how to convert x86_64-unknown-linux-gnu file names to toolchain format
+configure:4977: result: func_convert_file_noop
+configure:4984: checking for /usr/x86_64-slackware-linux/bin/ld option to reload object files
+configure:4991: result: -r
+configure:5065: checking for objdump
+configure:5081: found /usr/bin/objdump
+configure:5092: result: objdump
+configure:5124: checking how to recognize dependent libraries
+configure:5324: result: pass_all
+configure:5409: checking for dlltool
+configure:5425: found /usr/bin/dlltool
+configure:5436: result: dlltool
+configure:5469: checking how to associate runtime and link libraries
+configure:5496: result: printf %s\n
+configure:5557: checking for ar
+configure:5573: found /usr/bin/ar
+configure:5584: result: ar
+configure:5621: checking for archiver @FILE support
+configure:5638: gcc -c -g -O2  conftest.c >&5
+configure:5638: $? = 0
+configure:5641: ar cru libconftest.a @conftest.lst >&5
+configure:5644: $? = 0
+configure:5649: ar cru libconftest.a @conftest.lst >&5
 ar: conftest.o: No such file or directory
-configure:5649: $? = 1
-configure:5661: result: @
-configure:5719: checking for strip
-configure:5735: found /usr/bin/strip
-configure:5746: result: strip
-configure:5818: checking for ranlib
-configure:5834: found /usr/bin/ranlib
-configure:5845: result: ranlib
-configure:5947: checking command to parse /usr/bin/nm -B output from gcc object
-configure:6100: gcc -c -g -O2  conftest.c >&5
-configure:6103: $? = 0
-configure:6107: /usr/bin/nm -B conftest.o \| sed -n -e 's/^.*[ ]\([ABCDGIRSTW][ABCDGIRSTW]*\)[ ][ ]*\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2 \2/p' | sed '/ __gnu_lto/d' \> conftest.nm
-configure:6110: $? = 0
-configure:6176: gcc -o conftest -g -O2   conftest.c conftstm.o >&5
-configure:6179: $? = 0
-configure:6217: result: ok
-configure:6264: checking for sysroot
-configure:6294: result: no
-configure:6301: checking for a working dd
-configure:6339: result: /usr/bin/dd
-configure:6343: checking how to truncate binary pipes
-configure:6358: result: /usr/bin/dd bs=4096 count=1
-configure:6494: gcc -c -g -O2  conftest.c >&5
-configure:6497: $? = 0
-configure:6687: checking for mt
-configure:6703: found /bin/mt
-configure:6714: result: mt
-configure:6737: checking if mt is a manifest tool
-configure:6743: mt '-?'
+configure:5652: $? = 1
+configure:5664: result: @
+configure:5722: checking for strip
+configure:5738: found /usr/bin/strip
+configure:5749: result: strip
+configure:5821: checking for ranlib
+configure:5837: found /usr/bin/ranlib
+configure:5848: result: ranlib
+configure:5950: checking command to parse /usr/bin/nm -B output from gcc object
+configure:6103: gcc -c -g -O2  conftest.c >&5
+configure:6106: $? = 0
+configure:6110: /usr/bin/nm -B conftest.o \| sed -n -e 's/^.*[ ]\([ABCDGIRSTW][ABCDGIRSTW]*\)[ ][ ]*\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2 \2/p' | sed '/ __gnu_lto/d' \> conftest.nm
+configure:6113: $? = 0
+configure:6179: gcc -o conftest -g -O2   conftest.c conftstm.o >&5
+configure:6182: $? = 0
+configure:6220: result: ok
+configure:6267: checking for sysroot
+configure:6297: result: no
+configure:6304: checking for a working dd
+configure:6342: result: /usr/bin/dd
+configure:6346: checking how to truncate binary pipes
+configure:6361: result: /usr/bin/dd bs=4096 count=1
+configure:6497: gcc -c -g -O2  conftest.c >&5
+configure:6500: $? = 0
+configure:6690: checking for mt
+configure:6706: found /bin/mt
+configure:6717: result: mt
+configure:6740: checking if mt is a manifest tool
+configure:6746: mt '-?'
 usage: mt [-v] [--version] [-h] [ -f device ] command [ count ]
-configure:6751: result: no
-configure:7428: checking how to run the C preprocessor
-configure:7459: gcc -E  conftest.c
-configure:7459: $? = 0
-configure:7473: gcc -E  conftest.c
+configure:6754: result: no
+configure:7431: checking how to run the C preprocessor
+configure:7462: gcc -E  conftest.c
+configure:7462: $? = 0
+configure:7476: gcc -E  conftest.c
 conftest.c:11:28: fatal error: ac_nonexistent.h: No such file or directory
 compilation terminated.
-configure:7473: $? = 1
+configure:7476: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "bsi"
@@ -244,13 +244,13 @@ configure: failed program was:
 | #define VERSION "0.1.0"
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
-configure:7498: result: gcc -E
-configure:7518: gcc -E  conftest.c
-configure:7518: $? = 0
-configure:7532: gcc -E  conftest.c
+configure:7501: result: gcc -E
+configure:7521: gcc -E  conftest.c
+configure:7521: $? = 0
+configure:7535: gcc -E  conftest.c
 conftest.c:11:28: fatal error: ac_nonexistent.h: No such file or directory
 compilation terminated.
-configure:7532: $? = 1
+configure:7535: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "bsi"
@@ -263,108 +263,108 @@ configure: failed program was:
 | #define VERSION "0.1.0"
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
-configure:7561: checking for ANSI C header files
-configure:7581: gcc -c -g -O2  conftest.c >&5
-configure:7581: $? = 0
-configure:7654: gcc -o conftest -g -O2   conftest.c  >&5
-configure:7654: $? = 0
-configure:7654: ./conftest
-configure:7654: $? = 0
-configure:7665: result: yes
-configure:7678: checking for sys/types.h
-configure:7678: gcc -c -g -O2  conftest.c >&5
-configure:7678: $? = 0
-configure:7678: result: yes
-configure:7678: checking for sys/stat.h
-configure:7678: gcc -c -g -O2  conftest.c >&5
-configure:7678: $? = 0
-configure:7678: result: yes
-configure:7678: checking for stdlib.h
-configure:7678: gcc -c -g -O2  conftest.c >&5
-configure:7678: $? = 0
-configure:7678: result: yes
-configure:7678: checking for string.h
-configure:7678: gcc -c -g -O2  conftest.c >&5
-configure:7678: $? = 0
-configure:7678: result: yes
-configure:7678: checking for memory.h
-configure:7678: gcc -c -g -O2  conftest.c >&5
-configure:7678: $? = 0
-configure:7678: result: yes
-configure:7678: checking for strings.h
-configure:7678: gcc -c -g -O2  conftest.c >&5
-configure:7678: $? = 0
-configure:7678: result: yes
-configure:7678: checking for inttypes.h
-configure:7678: gcc -c -g -O2  conftest.c >&5
-configure:7678: $? = 0
-configure:7678: result: yes
-configure:7678: checking for stdint.h
-configure:7678: gcc -c -g -O2  conftest.c >&5
-configure:7678: $? = 0
-configure:7678: result: yes
-configure:7678: checking for unistd.h
-configure:7678: gcc -c -g -O2  conftest.c >&5
-configure:7678: $? = 0
-configure:7678: result: yes
-configure:7692: checking for dlfcn.h
-configure:7692: gcc -c -g -O2  conftest.c >&5
-configure:7692: $? = 0
-configure:7692: result: yes
-configure:7948: checking for objdir
-configure:7963: result: .libs
-configure:8223: checking if gcc supports -fno-rtti -fno-exceptions
-configure:8241: gcc -c -g -O2  -fno-rtti -fno-exceptions conftest.c >&5
+configure:7564: checking for ANSI C header files
+configure:7584: gcc -c -g -O2  conftest.c >&5
+configure:7584: $? = 0
+configure:7657: gcc -o conftest -g -O2   conftest.c  >&5
+configure:7657: $? = 0
+configure:7657: ./conftest
+configure:7657: $? = 0
+configure:7668: result: yes
+configure:7681: checking for sys/types.h
+configure:7681: gcc -c -g -O2  conftest.c >&5
+configure:7681: $? = 0
+configure:7681: result: yes
+configure:7681: checking for sys/stat.h
+configure:7681: gcc -c -g -O2  conftest.c >&5
+configure:7681: $? = 0
+configure:7681: result: yes
+configure:7681: checking for stdlib.h
+configure:7681: gcc -c -g -O2  conftest.c >&5
+configure:7681: $? = 0
+configure:7681: result: yes
+configure:7681: checking for string.h
+configure:7681: gcc -c -g -O2  conftest.c >&5
+configure:7681: $? = 0
+configure:7681: result: yes
+configure:7681: checking for memory.h
+configure:7681: gcc -c -g -O2  conftest.c >&5
+configure:7681: $? = 0
+configure:7681: result: yes
+configure:7681: checking for strings.h
+configure:7681: gcc -c -g -O2  conftest.c >&5
+configure:7681: $? = 0
+configure:7681: result: yes
+configure:7681: checking for inttypes.h
+configure:7681: gcc -c -g -O2  conftest.c >&5
+configure:7681: $? = 0
+configure:7681: result: yes
+configure:7681: checking for stdint.h
+configure:7681: gcc -c -g -O2  conftest.c >&5
+configure:7681: $? = 0
+configure:7681: result: yes
+configure:7681: checking for unistd.h
+configure:7681: gcc -c -g -O2  conftest.c >&5
+configure:7681: $? = 0
+configure:7681: result: yes
+configure:7695: checking for dlfcn.h
+configure:7695: gcc -c -g -O2  conftest.c >&5
+configure:7695: $? = 0
+configure:7695: result: yes
+configure:7951: checking for objdir
+configure:7966: result: .libs
+configure:8226: checking if gcc supports -fno-rtti -fno-exceptions
+configure:8244: gcc -c -g -O2  -fno-rtti -fno-exceptions conftest.c >&5
 cc1: warning: command line option '-fno-rtti' is valid for C++/ObjC++ but not for C
-configure:8245: $? = 0
-configure:8258: result: no
-configure:8616: checking for gcc option to produce PIC
-configure:8623: result: -fPIC -DPIC
-configure:8631: checking if gcc PIC flag -fPIC -DPIC works
-configure:8649: gcc -c -g -O2  -fPIC -DPIC -DPIC conftest.c >&5
-configure:8653: $? = 0
-configure:8666: result: yes
-configure:8695: checking if gcc static flag -static works
-configure:8723: result: yes
-configure:8738: checking if gcc supports -c -o file.o
-configure:8759: gcc -c -g -O2  -o out/conftest2.o conftest.c >&5
-configure:8763: $? = 0
-configure:8785: result: yes
-configure:8793: checking if gcc supports -c -o file.o
-configure:8840: result: yes
-configure:8873: checking whether the gcc linker (/usr/x86_64-slackware-linux/bin/ld -m elf_x86_64) supports shared libraries
-configure:10132: result: yes
-configure:10169: checking whether -lc should be explicitly linked in
-configure:10177: gcc -c -g -O2  conftest.c >&5
-configure:10180: $? = 0
-configure:10195: gcc -shared  -fPIC -DPIC conftest.o  -v -Wl,-soname -Wl,conftest -o conftest 2\>\&1 \| /usr/bin/grep  -lc  \>/dev/null 2\>\&1
-configure:10198: $? = 0
-configure:10212: result: no
-configure:10372: checking dynamic linker characteristics
-configure:10953: gcc -o conftest -g -O2   -Wl,-rpath -Wl,/foo conftest.c  >&5
-configure:10953: $? = 0
-configure:11190: result: GNU/Linux ld.so
-configure:11312: checking how to hardcode library paths into programs
-configure:11337: result: immediate
-configure:11885: checking whether stripping libraries is possible
-configure:11890: result: yes
-configure:11925: checking if libtool supports shared libraries
-configure:11927: result: yes
-configure:11930: checking whether to build shared libraries
-configure:11955: result: yes
-configure:11958: checking whether to build static libraries
-configure:11962: result: yes
-configure:12053: checking for gcc
-configure:12080: result: gcc
-configure:12309: checking for C compiler version
-configure:12318: gcc --version >&5
+configure:8248: $? = 0
+configure:8261: result: no
+configure:8619: checking for gcc option to produce PIC
+configure:8626: result: -fPIC -DPIC
+configure:8634: checking if gcc PIC flag -fPIC -DPIC works
+configure:8652: gcc -c -g -O2  -fPIC -DPIC -DPIC conftest.c >&5
+configure:8656: $? = 0
+configure:8669: result: yes
+configure:8698: checking if gcc static flag -static works
+configure:8726: result: yes
+configure:8741: checking if gcc supports -c -o file.o
+configure:8762: gcc -c -g -O2  -o out/conftest2.o conftest.c >&5
+configure:8766: $? = 0
+configure:8788: result: yes
+configure:8796: checking if gcc supports -c -o file.o
+configure:8843: result: yes
+configure:8876: checking whether the gcc linker (/usr/x86_64-slackware-linux/bin/ld -m elf_x86_64) supports shared libraries
+configure:10135: result: yes
+configure:10172: checking whether -lc should be explicitly linked in
+configure:10180: gcc -c -g -O2  conftest.c >&5
+configure:10183: $? = 0
+configure:10198: gcc -shared  -fPIC -DPIC conftest.o  -v -Wl,-soname -Wl,conftest -o conftest 2\>\&1 \| /usr/bin/grep  -lc  \>/dev/null 2\>\&1
+configure:10201: $? = 0
+configure:10215: result: no
+configure:10375: checking dynamic linker characteristics
+configure:10956: gcc -o conftest -g -O2   -Wl,-rpath -Wl,/foo conftest.c  >&5
+configure:10956: $? = 0
+configure:11193: result: GNU/Linux ld.so
+configure:11315: checking how to hardcode library paths into programs
+configure:11340: result: immediate
+configure:11888: checking whether stripping libraries is possible
+configure:11893: result: yes
+configure:11928: checking if libtool supports shared libraries
+configure:11930: result: yes
+configure:11933: checking whether to build shared libraries
+configure:11958: result: yes
+configure:11961: checking whether to build static libraries
+configure:11965: result: yes
+configure:12056: checking for gcc
+configure:12083: result: gcc
+configure:12312: checking for C compiler version
+configure:12321: gcc --version >&5
 gcc (GCC) 5.5.0
 Copyright (C) 2015 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-configure:12329: $? = 0
-configure:12318: gcc -v >&5
+configure:12332: $? = 0
+configure:12321: gcc -v >&5
 Reading specs from /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/specs
 COLLECT_GCC=gcc
 COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-slackware-linux/5.5.0/lto-wrapper
@@ -372,90 +372,99 @@ Target: x86_64-slackware-linux
 Configured with: ../gcc-5.5.0/configure --prefix=/usr --libdir=/usr/lib64 --mandir=/usr/man --infodir=/usr/info --enable-shared --enable-bootstrap --enable-languages=ada,c,c++,fortran,go,java,lto,objc --enable-threads=posix --enable-checking=release --enable-objc-gc --with-system-zlib --with-python-dir=/lib64/python2.7/site-packages --enable-libstdcxx-dual-abi --with-default-libstdcxx-abi=gcc4-compatible --disable-libunwind-exceptions --enable-__cxa_atexit --enable-libssp --enable-lto --disable-install-libiberty --with-gnu-ld --verbose --enable-java-home --with-java-home=/usr/lib64/jvm/jre --with-jvm-root-dir=/usr/lib64/jvm --with-jvm-jar-dir=/usr/lib64/jvm/jvm-exports --with-arch-directory=amd64 --with-antlr-jar=/tmp/slackware64-14.2/gcc/antlr-runtime-3.4.jar --enable-java-awt=gtk --disable-gtktest --disable-multilib --target=x86_64-slackware-linux --build=x86_64-slackware-linux --host=x86_64-slackware-linux
 Thread model: posix
 gcc version 5.5.0 (GCC) 
-configure:12329: $? = 0
-configure:12318: gcc -V >&5
+configure:12332: $? = 0
+configure:12321: gcc -V >&5
 gcc: error: unrecognized command line option '-V'
 gcc: fatal error: no input files
 compilation terminated.
-configure:12329: $? = 1
-configure:12318: gcc -qversion >&5
+configure:12332: $? = 1
+configure:12321: gcc -qversion >&5
 gcc: error: unrecognized command line option '-qversion'
 gcc: fatal error: no input files
 compilation terminated.
-configure:12329: $? = 1
-configure:12333: checking whether we are using the GNU C compiler
-configure:12361: result: yes
-configure:12370: checking whether gcc accepts -g
-configure:12431: result: yes
-configure:12448: checking for gcc option to accept ISO C89
-configure:12524: result: none needed
-configure:12549: checking whether gcc understands -c and -o together
-configure:12586: result: yes
-configure:12605: checking dependency style of gcc
-configure:12716: result: gcc3
-configure:12740: checking for gawk
-configure:12767: result: gawk
-configure:12778: checking for library containing strerror
-configure:12809: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c  >&5
+configure:12332: $? = 1
+configure:12336: checking whether we are using the GNU C compiler
+configure:12364: result: yes
+configure:12373: checking whether gcc accepts -g
+configure:12434: result: yes
+configure:12451: checking for gcc option to accept ISO C89
+configure:12527: result: none needed
+configure:12552: checking whether gcc understands -c and -o together
+configure:12589: result: yes
+configure:12608: checking dependency style of gcc
+configure:12719: result: gcc3
+configure:12743: checking for gawk
+configure:12770: result: gawk
+configure:12781: checking for library containing strerror
+configure:12812: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c  >&5
 conftest.c:30:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  char strerror ();
  ^
 conftest.c:32:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
-configure:12809: $? = 0
-configure:12826: result: none required
-configure:12834: checking for ANSI C header files
-configure:12938: result: yes
-configure:13032: checking for pkg-config
-configure:13050: found /usr/bin/pkg-config
-configure:13062: result: /usr/bin/pkg-config
-configure:13087: checking pkg-config is at least version 0.16
-configure:13090: result: yes
-configure:13107: checking for GLIB - version >= 2.4.0
-configure:13219: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -pthread -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include   conftest.c -lgthread-2.0 -pthread -Wl,--export-dynamic -lgmodule-2.0 -pthread -lglib-2.0  >&5
+configure:12812: $? = 0
+configure:12829: result: none required
+configure:12837: checking for ANSI C header files
+configure:12941: result: yes
+configure:13035: checking for pkg-config
+configure:13053: found /usr/bin/pkg-config
+configure:13065: result: /usr/bin/pkg-config
+configure:13090: checking pkg-config is at least version 0.16
+configure:13093: result: yes
+configure:13110: checking for GLIB - version >= 2.4.0
+configure:13222: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -pthread -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include   conftest.c -lgthread-2.0 -pthread -Wl,--export-dynamic -lgmodule-2.0 -pthread -lglib-2.0  >&5
 conftest.c:30:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
-configure:13219: $? = 0
-configure:13219: ./conftest
-configure:13219: $? = 0
-configure:13233: result: yes (version 2.46.2)
-configure:13643: checking for gtv-config
-configure:13659: found /home/michael/Codes/bin/gtv-config
-configure:13671: result: yes
-configure:13699: checking for wbfmm-config
-configure:13715: found /home/michael/Codes/bin/wbfmm-config
-configure:13727: result: yes
-configure:13755: checking for blaswrap-config
-configure:13771: found /home/michael/Codes/bin/blaswrap-config
-configure:13783: result: yes
-configure:13818: checking for gcc __builtin_cpu_init function
-configure:13841: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c  >&5
-conftest.c:29:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:13222: $? = 0
+configure:13222: ./conftest
+configure:13222: $? = 0
+configure:13236: result: yes (version 2.46.2)
+configure:13646: checking for gtv-config
+configure:13662: found /home/michael/Codes/bin/gtv-config
+configure:13674: result: yes
+configure:13702: checking for sqt-config
+configure:13718: found /home/michael/Codes/bin/sqt-config
+configure:13730: result: yes
+configure:13758: checking for gqr-config
+configure:13774: found /home/michael/Codes/bin/gqr-config
+configure:13786: result: yes
+configure:13814: checking for mop-config
+configure:13830: found /home/michael/Codes/bin/mop-config
+configure:13842: result: yes
+configure:13870: checking for wbfmm-config
+configure:13886: found /home/michael/Codes/bin/wbfmm-config
+configure:13898: result: yes
+configure:13926: checking for blaswrap-config
+configure:13942: found /home/michael/Codes/bin/blaswrap-config
+configure:13954: result: yes
+configure:13989: checking for gcc __builtin_cpu_init function
+configure:14012: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c  >&5
+conftest.c:32:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
-configure:13841: $? = 0
-configure:13841: ./conftest
-configure:13841: $? = 0
-configure:13851: result: yes
-configure:13866: checking for x86 avx instruction support
-configure:13892: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c  >&5
-conftest.c:29:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:14012: $? = 0
+configure:14012: ./conftest
+configure:14012: $? = 0
+configure:14022: result: yes
+configure:14037: checking for x86 avx instruction support
+configure:14063: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c  >&5
+conftest.c:32:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
-configure:13892: $? = 0
-configure:13892: ./conftest
-configure:13892: $? = 0
-configure:13904: result: yes
-configure:13929: checking for x86 avx2 instruction support
-configure:13955: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c  >&5
-conftest.c:30:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:14063: $? = 0
+configure:14063: ./conftest
+configure:14063: $? = 0
+configure:14075: result: yes
+configure:14100: checking for x86 avx2 instruction support
+configure:14126: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c  >&5
+conftest.c:33:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
-configure:13955: $? = 0
-configure:13955: ./conftest
-configure:13955: $? = 1
+configure:14126: $? = 0
+configure:14126: ./conftest
+configure:14126: $? = 1
 configure: program exited with status 1
 configure: failed program was:
 | /* confdefs.h */
@@ -481,6 +490,9 @@ configure: failed program was:
 | #define LT_OBJDIR ".libs/"
 | #define STDC_HEADERS 1
 | #define HAVE_GTV 1
+| #define HAVE_SQT 1
+| #define HAVE_GQR 1
+| #define HAVE_MOP 1
 | #define HAVE_WBFMM 1
 | #define HAVE_BLASWRAP 1
 | #define HAVE_AVX_INSTRUCTIONS 1
@@ -497,15 +509,15 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:13967: result: no
-configure:13992: checking for x86 fma instruction support
-configure:14018: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c  >&5
-conftest.c:30:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:14138: result: no
+configure:14163: checking for x86 fma instruction support
+configure:14189: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c  >&5
+conftest.c:33:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
-configure:14018: $? = 0
-configure:14018: ./conftest
-configure:14018: $? = 1
+configure:14189: $? = 0
+configure:14189: ./conftest
+configure:14189: $? = 1
 configure: program exited with status 1
 configure: failed program was:
 | /* confdefs.h */
@@ -531,6 +543,9 @@ configure: failed program was:
 | #define LT_OBJDIR ".libs/"
 | #define STDC_HEADERS 1
 | #define HAVE_GTV 1
+| #define HAVE_SQT 1
+| #define HAVE_GQR 1
+| #define HAVE_MOP 1
 | #define HAVE_WBFMM 1
 | #define HAVE_BLASWRAP 1
 | #define HAVE_AVX_INSTRUCTIONS 1
@@ -547,33 +562,33 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:14030: result: no
-configure:14054: checking for cos in -lm
-configure:14079: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lm   >&5
-conftest.c:35:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:14201: result: no
+configure:14225: checking for cos in -lm
+configure:14250: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lm   >&5
+conftest.c:38:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  char cos ();
  ^
-conftest.c:35:6: warning: conflicting types for built-in function 'cos'
+conftest.c:38:6: warning: conflicting types for built-in function 'cos'
  char cos ();
       ^
-conftest.c:37:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+conftest.c:40:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
-configure:14079: $? = 0
-configure:14088: result: yes
-configure:14110: checking for gcc option to support OpenMP
-configure:14125: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lm  >&5
-conftest.c:31:2: error: unknown type name 'choke'
+configure:14250: $? = 0
+configure:14259: result: yes
+configure:14281: checking for gcc option to support OpenMP
+configure:14296: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lm  >&5
+conftest.c:34:2: error: unknown type name 'choke'
   choke me
   ^
-In file included from conftest.c:33:0:
+In file included from conftest.c:36:0:
 /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/include/omp.h:35:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'typedef'
  typedef struct
  ^
-conftest.c:34:5: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+conftest.c:37:5: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  int main () { return omp_get_num_threads (); }
      ^
-configure:14125: $? = 1
+configure:14296: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "bsi"
@@ -598,6 +613,9 @@ configure: failed program was:
 | #define LT_OBJDIR ".libs/"
 | #define STDC_HEADERS 1
 | #define HAVE_GTV 1
+| #define HAVE_SQT 1
+| #define HAVE_GQR 1
+| #define HAVE_MOP 1
 | #define HAVE_WBFMM 1
 | #define HAVE_BLASWRAP 1
 | #define HAVE_AVX_INSTRUCTIONS 1
@@ -610,17 +628,17 @@ configure: failed program was:
 | #include <omp.h>
 | int main () { return omp_get_num_threads (); }
 | 
-configure:14143: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -fopenmp   conftest.c -lm  >&5
-conftest.c:34:5: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:14314: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -fopenmp   conftest.c -lm  >&5
+conftest.c:37:5: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  int main () { return omp_get_num_threads (); }
      ^
-configure:14143: $? = 0
-configure:14157: result: -fopenmp
-configure:14221: checking for g77
-configure:14237: found /usr/bin/g77
-configure:14248: result: g77
-configure:14274: checking for Fortran 77 compiler version
-configure:14283: g77 --version >&5
+configure:14314: $? = 0
+configure:14328: result: -fopenmp
+configure:14392: checking for g77
+configure:14408: found /usr/bin/g77
+configure:14419: result: g77
+configure:14445: checking for Fortran 77 compiler version
+configure:14454: g77 --version >&5
 GNU Fortran (GCC) 5.5.0
 Copyright (C) 2015 Free Software Foundation, Inc.
 
@@ -629,8 +647,8 @@ You may redistribute copies of GNU Fortran
 under the terms of the GNU General Public License.
 For more information about these matters, see the file named COPYING
 
-configure:14294: $? = 0
-configure:14283: g77 -v >&5
+configure:14465: $? = 0
+configure:14454: g77 -v >&5
 Reading specs from /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/specs
 COLLECT_GCC=g77
 COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-slackware-linux/5.5.0/lto-wrapper
@@ -638,112 +656,112 @@ Target: x86_64-slackware-linux
 Configured with: ../gcc-5.5.0/configure --prefix=/usr --libdir=/usr/lib64 --mandir=/usr/man --infodir=/usr/info --enable-shared --enable-bootstrap --enable-languages=ada,c,c++,fortran,go,java,lto,objc --enable-threads=posix --enable-checking=release --enable-objc-gc --with-system-zlib --with-python-dir=/lib64/python2.7/site-packages --enable-libstdcxx-dual-abi --with-default-libstdcxx-abi=gcc4-compatible --disable-libunwind-exceptions --enable-__cxa_atexit --enable-libssp --enable-lto --disable-install-libiberty --with-gnu-ld --verbose --enable-java-home --with-java-home=/usr/lib64/jvm/jre --with-jvm-root-dir=/usr/lib64/jvm --with-jvm-jar-dir=/usr/lib64/jvm/jvm-exports --with-arch-directory=amd64 --with-antlr-jar=/tmp/slackware64-14.2/gcc/antlr-runtime-3.4.jar --enable-java-awt=gtk --disable-gtktest --disable-multilib --target=x86_64-slackware-linux --build=x86_64-slackware-linux --host=x86_64-slackware-linux
 Thread model: posix
 gcc version 5.5.0 (GCC) 
-configure:14294: $? = 0
-configure:14283: g77 -V >&5
+configure:14465: $? = 0
+configure:14454: g77 -V >&5
 g77: error: unrecognized command line option '-V'
 g77: fatal error: no input files
 compilation terminated.
-configure:14294: $? = 1
-configure:14283: g77 -qversion >&5
+configure:14465: $? = 1
+configure:14454: g77 -qversion >&5
 g77: error: unrecognized command line option '-qversion'
 g77: fatal error: no input files
 compilation terminated.
-configure:14294: $? = 1
-configure:14303: checking whether we are using the GNU Fortran 77 compiler
-configure:14316: g77 -c  conftest.F >&5
-configure:14316: $? = 0
-configure:14325: result: yes
-configure:14331: checking whether g77 accepts -g
-configure:14342: g77 -c -g conftest.f >&5
-configure:14342: $? = 0
-configure:14350: result: yes
-configure:14479: checking if libtool supports shared libraries
-configure:14481: result: yes
-configure:14484: checking whether to build shared libraries
-configure:14508: result: yes
-configure:14511: checking whether to build static libraries
-configure:14515: result: yes
-configure:14867: checking for g77 option to produce PIC
-configure:14874: result: -fPIC
-configure:14882: checking if g77 PIC flag -fPIC works
-configure:14900: g77 -c -g -O2 -fPIC conftest.f >&5
-configure:14904: $? = 0
-configure:14917: result: yes
-configure:14940: checking if g77 static flag -static works
-configure:14968: result: yes
-configure:14980: checking if g77 supports -c -o file.o
-configure:15001: g77 -c -g -O2 -o out/conftest2.o conftest.f >&5
-configure:15005: $? = 0
-configure:15027: result: yes
-configure:15032: checking if g77 supports -c -o file.o
-configure:15079: result: yes
-configure:15109: checking whether the g77 linker (/usr/x86_64-slackware-linux/bin/ld -m elf_x86_64) supports shared libraries
-configure:16318: result: yes
-configure:16459: checking dynamic linker characteristics
-configure:17198: result: GNU/Linux ld.so
-configure:17263: checking how to hardcode library paths into programs
-configure:17288: result: immediate
-configure:17325: checking how to get verbose linking output from g77
-configure:17335: g77 -c -g -O2 conftest.f >&5
-configure:17335: $? = 0
-configure:17353: g77 -o conftest -g -O2 -v conftest.f -lm
+configure:14465: $? = 1
+configure:14474: checking whether we are using the GNU Fortran 77 compiler
+configure:14487: g77 -c  conftest.F >&5
+configure:14487: $? = 0
+configure:14496: result: yes
+configure:14502: checking whether g77 accepts -g
+configure:14513: g77 -c -g conftest.f >&5
+configure:14513: $? = 0
+configure:14521: result: yes
+configure:14650: checking if libtool supports shared libraries
+configure:14652: result: yes
+configure:14655: checking whether to build shared libraries
+configure:14679: result: yes
+configure:14682: checking whether to build static libraries
+configure:14686: result: yes
+configure:15038: checking for g77 option to produce PIC
+configure:15045: result: -fPIC
+configure:15053: checking if g77 PIC flag -fPIC works
+configure:15071: g77 -c -g -O2 -fPIC conftest.f >&5
+configure:15075: $? = 0
+configure:15088: result: yes
+configure:15111: checking if g77 static flag -static works
+configure:15139: result: yes
+configure:15151: checking if g77 supports -c -o file.o
+configure:15172: g77 -c -g -O2 -o out/conftest2.o conftest.f >&5
+configure:15176: $? = 0
+configure:15198: result: yes
+configure:15203: checking if g77 supports -c -o file.o
+configure:15250: result: yes
+configure:15280: checking whether the g77 linker (/usr/x86_64-slackware-linux/bin/ld -m elf_x86_64) supports shared libraries
+configure:16489: result: yes
+configure:16630: checking dynamic linker characteristics
+configure:17369: result: GNU/Linux ld.so
+configure:17434: checking how to hardcode library paths into programs
+configure:17459: result: immediate
+configure:17496: checking how to get verbose linking output from g77
+configure:17506: g77 -c -g -O2 conftest.f >&5
+configure:17506: $? = 0
+configure:17524: g77 -o conftest -g -O2 -v conftest.f -lm
 Reading specs from /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/specs
 Target: x86_64-slackware-linux
 Thread model: posix
 gcc version 5.5.0 (GCC) 
- /usr/libexec/gcc/x86_64-slackware-linux/5.5.0/f951 conftest.f -ffixed-form -quiet -dumpbase conftest.f -mtune=generic -march=x86-64 -auxbase conftest -g -O2 -version -fintrinsic-modules-path /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/finclude -o /tmp/ccM45BGJ.s
+ /usr/libexec/gcc/x86_64-slackware-linux/5.5.0/f951 conftest.f -ffixed-form -quiet -dumpbase conftest.f -mtune=generic -march=x86-64 -auxbase conftest -g -O2 -version -fintrinsic-modules-path /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/finclude -o /tmp/ccWjZ1sl.s
 GNU Fortran (GCC) version 5.5.0 (x86_64-slackware-linux)
 	compiled by GNU C version 5.5.0, GMP version 6.1.1, MPFR version 3.1.4, MPC version 1.0.3
 GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
 GNU Fortran2008 (GCC) version 5.5.0 (x86_64-slackware-linux)
 	compiled by GNU C version 5.5.0, GMP version 6.1.1, MPFR version 3.1.4, MPC version 1.0.3
 GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
- /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/bin/as -v --64 -o /tmp/ccVc84dg.o /tmp/ccM45BGJ.s
+ /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/bin/as -v --64 -o /tmp/ccgHlj8b.o /tmp/ccWjZ1sl.s
 GNU assembler version 2.26 (x86_64-slackware-linux) using BFD version version 2.26.20160125
 Reading specs from /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64/libgfortran.spec
 rename spec lib to liborig
- /usr/libexec/gcc/x86_64-slackware-linux/5.5.0/collect2 -plugin /usr/libexec/gcc/x86_64-slackware-linux/5.5.0/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-slackware-linux/5.5.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccGDVuMM.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lquadmath -plugin-opt=-pass-through=-lm -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o conftest /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64/crt1.o /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64/crti.o /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/crtbegin.o -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. /tmp/ccVc84dg.o -lgfortran -lm -lgfortran -lm -lgcc_s -lgcc -lquadmath -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/crtend.o /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64/crtn.o
-configure:17436: result: -v
-configure:17438: checking for Fortran 77 libraries of g77
-configure:17461: g77 -o conftest -g -O2 -v conftest.f -lm
+ /usr/libexec/gcc/x86_64-slackware-linux/5.5.0/collect2 -plugin /usr/libexec/gcc/x86_64-slackware-linux/5.5.0/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-slackware-linux/5.5.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccEJApO2.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lquadmath -plugin-opt=-pass-through=-lm -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o conftest /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64/crt1.o /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64/crti.o /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/crtbegin.o -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. /tmp/ccgHlj8b.o -lgfortran -lm -lgfortran -lm -lgcc_s -lgcc -lquadmath -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/crtend.o /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64/crtn.o
+configure:17607: result: -v
+configure:17609: checking for Fortran 77 libraries of g77
+configure:17632: g77 -o conftest -g -O2 -v conftest.f -lm
 Reading specs from /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/specs
 Target: x86_64-slackware-linux
 Thread model: posix
 gcc version 5.5.0 (GCC) 
- /usr/libexec/gcc/x86_64-slackware-linux/5.5.0/f951 conftest.f -ffixed-form -quiet -dumpbase conftest.f -mtune=generic -march=x86-64 -auxbase conftest -g -O2 -version -fintrinsic-modules-path /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/finclude -o /tmp/ccFyrBUO.s
+ /usr/libexec/gcc/x86_64-slackware-linux/5.5.0/f951 conftest.f -ffixed-form -quiet -dumpbase conftest.f -mtune=generic -march=x86-64 -auxbase conftest -g -O2 -version -fintrinsic-modules-path /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/finclude -o /tmp/ccmmQicq.s
 GNU Fortran (GCC) version 5.5.0 (x86_64-slackware-linux)
 	compiled by GNU C version 5.5.0, GMP version 6.1.1, MPFR version 3.1.4, MPC version 1.0.3
 GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
 GNU Fortran2008 (GCC) version 5.5.0 (x86_64-slackware-linux)
 	compiled by GNU C version 5.5.0, GMP version 6.1.1, MPFR version 3.1.4, MPC version 1.0.3
 GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
- /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/bin/as -v --64 -o /tmp/ccP5r6Dl.o /tmp/ccFyrBUO.s
+ /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/bin/as -v --64 -o /tmp/ccxPqq2g.o /tmp/ccmmQicq.s
 GNU assembler version 2.26 (x86_64-slackware-linux) using BFD version version 2.26.20160125
 Reading specs from /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64/libgfortran.spec
 rename spec lib to liborig
- /usr/libexec/gcc/x86_64-slackware-linux/5.5.0/collect2 -plugin /usr/libexec/gcc/x86_64-slackware-linux/5.5.0/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-slackware-linux/5.5.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccA2CroS.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lquadmath -plugin-opt=-pass-through=-lm -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o conftest /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64/crt1.o /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64/crti.o /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/crtbegin.o -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. /tmp/ccP5r6Dl.o -lgfortran -lm -lgfortran -lm -lgcc_s -lgcc -lquadmath -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/crtend.o /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64/crtn.o
-configure:17657: result:  -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath
-configure:17673: checking for dummy main to link with Fortran 77 libraries
-configure:17707: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
-conftest.c:39:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+ /usr/libexec/gcc/x86_64-slackware-linux/5.5.0/collect2 -plugin /usr/libexec/gcc/x86_64-slackware-linux/5.5.0/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-slackware-linux/5.5.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccw1jnT7.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lquadmath -plugin-opt=-pass-through=-lm -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o conftest /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64/crt1.o /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64/crti.o /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/crtbegin.o -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. /tmp/ccxPqq2g.o -lgfortran -lm -lgfortran -lm -lgcc_s -lgcc -lquadmath -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/crtend.o /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64/crtn.o
+configure:17828: result:  -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath
+configure:17844: checking for dummy main to link with Fortran 77 libraries
+configure:17878: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
+conftest.c:42:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
-configure:17707: $? = 0
-configure:17752: result: none
-configure:17785: checking for Fortran 77 name-mangling scheme
-configure:17798: g77 -c -g -O2 conftest.f >&5
-configure:17798: $? = 0
-configure:17839: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c cfortran_test.o -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
-conftest.c:36:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:17878: $? = 0
+configure:17923: result: none
+configure:17956: checking for Fortran 77 name-mangling scheme
+configure:17969: g77 -c -g -O2 conftest.f >&5
+configure:17969: $? = 0
+configure:18010: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c cfortran_test.o -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
+conftest.c:39:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  char foobar ();
  ^
-conftest.c:46:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+conftest.c:49:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
-/tmp/ccUFuJ1x.o: In function `main':
-/home/michael/Codes/C/bsi/conftest.c:48: undefined reference to `foobar'
+/tmp/cc37eNUs.o: In function `main':
+/home/michael/Codes/C/bsi/conftest.c:51: undefined reference to `foobar'
 collect2: error: ld returned 1 exit status
-configure:17839: $? = 1
+configure:18010: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "bsi"
@@ -768,6 +786,9 @@ configure: failed program was:
 | #define LT_OBJDIR ".libs/"
 | #define STDC_HEADERS 1
 | #define HAVE_GTV 1
+| #define HAVE_SQT 1
+| #define HAVE_GQR 1
+| #define HAVE_MOP 1
 | #define HAVE_WBFMM 1
 | #define HAVE_BLASWRAP 1
 | #define HAVE_AVX_INSTRUCTIONS 1
@@ -796,35 +817,35 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:17839: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c cfortran_test.o -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
-conftest.c:36:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:18010: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c cfortran_test.o -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
+conftest.c:39:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  char foobar_ ();
  ^
-conftest.c:46:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+conftest.c:49:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
-configure:17839: $? = 0
-configure:17897: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c cfortran_test.o -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
-conftest.c:36:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:18010: $? = 0
+configure:18068: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c cfortran_test.o -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
+conftest.c:39:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  char foo_bar_ ();
  ^
-conftest.c:46:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+conftest.c:49:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
-configure:17897: $? = 0
-configure:17939: result: lower case, underscore, no extra underscore
-configure:18121: checking for sgemm_
-configure:18121: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
-conftest.c:54:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:18068: $? = 0
+configure:18110: result: lower case, underscore, no extra underscore
+configure:18292: checking for sgemm_
+configure:18292: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
+conftest.c:57:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  char sgemm_ ();
  ^
-conftest.c:63:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+conftest.c:66:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
-/tmp/ccWPdsLQ.o: In function `main':
-/home/michael/Codes/C/bsi/conftest.c:65: undefined reference to `sgemm_'
+/tmp/ccmCqOlK.o: In function `main':
+/home/michael/Codes/C/bsi/conftest.c:68: undefined reference to `sgemm_'
 collect2: error: ld returned 1 exit status
-configure:18121: $? = 1
+configure:18292: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "bsi"
@@ -849,6 +870,9 @@ configure: failed program was:
 | #define LT_OBJDIR ".libs/"
 | #define STDC_HEADERS 1
 | #define HAVE_GTV 1
+| #define HAVE_SQT 1
+| #define HAVE_GQR 1
+| #define HAVE_MOP 1
 | #define HAVE_WBFMM 1
 | #define HAVE_BLASWRAP 1
 | #define HAVE_AVX_INSTRUCTIONS 1
@@ -894,18 +918,18 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:18121: result: no
-configure:18131: checking for ATL_xerbla in -latlas
-configure:18164: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -latlas  -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
-conftest.c:38:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:18292: result: no
+configure:18302: checking for ATL_xerbla in -latlas
+configure:18335: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -latlas  -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
+conftest.c:41:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  char ATL_xerbla ();
  ^
-conftest.c:48:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+conftest.c:51:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
 /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/bin/ld: cannot find -latlas
 collect2: error: ld returned 1 exit status
-configure:18164: $? = 1
+configure:18335: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "bsi"
@@ -930,6 +954,9 @@ configure: failed program was:
 | #define LT_OBJDIR ".libs/"
 | #define STDC_HEADERS 1
 | #define HAVE_GTV 1
+| #define HAVE_SQT 1
+| #define HAVE_GQR 1
+| #define HAVE_MOP 1
 | #define HAVE_WBFMM 1
 | #define HAVE_BLASWRAP 1
 | #define HAVE_AVX_INSTRUCTIONS 1
@@ -960,18 +987,18 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:18173: result: no
-configure:18283: checking for sgemm_ in -Wl,-framework -Wl,vecLib
-configure:18311: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -Wl,-framework -Wl,vecLib -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
-conftest.c:38:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:18344: result: no
+configure:18454: checking for sgemm_ in -Wl,-framework -Wl,vecLib
+configure:18482: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -Wl,-framework -Wl,vecLib -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
+conftest.c:41:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  char sgemm_ ();
  ^
-conftest.c:48:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+conftest.c:51:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
 /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/bin/ld: -f may not be used without -shared
 collect2: error: ld returned 1 exit status
-configure:18311: $? = 1
+configure:18482: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "bsi"
@@ -996,6 +1023,9 @@ configure: failed program was:
 | #define LT_OBJDIR ".libs/"
 | #define STDC_HEADERS 1
 | #define HAVE_GTV 1
+| #define HAVE_SQT 1
+| #define HAVE_GQR 1
+| #define HAVE_MOP 1
 | #define HAVE_WBFMM 1
 | #define HAVE_BLASWRAP 1
 | #define HAVE_AVX_INSTRUCTIONS 1
@@ -1026,28 +1056,28 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:18318: result: no
-configure:18326: checking for sgemm_ in -lblas
-configure:18359: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lblas  -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
-conftest.c:38:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:18489: result: no
+configure:18497: checking for sgemm_ in -lblas
+configure:18530: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lblas  -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
+conftest.c:41:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  char sgemm_ ();
  ^
-conftest.c:48:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+conftest.c:51:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
-configure:18359: $? = 0
-configure:18369: result: yes
-configure:18373: checking for dgemm_ in -ldgemm
-configure:18406: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -ldgemm -lblas -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
-conftest.c:38:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:18530: $? = 0
+configure:18540: result: yes
+configure:18544: checking for dgemm_ in -ldgemm
+configure:18577: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -ldgemm -lblas -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
+conftest.c:41:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  char dgemm_ ();
  ^
-conftest.c:48:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+conftest.c:51:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
 /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/bin/ld: cannot find -ldgemm
 collect2: error: ld returned 1 exit status
-configure:18406: $? = 1
+configure:18577: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "bsi"
@@ -1072,6 +1102,9 @@ configure: failed program was:
 | #define LT_OBJDIR ".libs/"
 | #define STDC_HEADERS 1
 | #define HAVE_GTV 1
+| #define HAVE_SQT 1
+| #define HAVE_GQR 1
+| #define HAVE_MOP 1
 | #define HAVE_WBFMM 1
 | #define HAVE_BLASWRAP 1
 | #define HAVE_AVX_INSTRUCTIONS 1
@@ -1102,18 +1135,18 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:18416: result: no
-configure:18478: checking for sgemm_ in -lcxml
-configure:18511: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lcxml  -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
-conftest.c:38:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:18587: result: no
+configure:18649: checking for sgemm_ in -lcxml
+configure:18682: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lcxml  -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
+conftest.c:41:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  char sgemm_ ();
  ^
-conftest.c:48:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+conftest.c:51:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
 /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/bin/ld: cannot find -lcxml
 collect2: error: ld returned 1 exit status
-configure:18511: $? = 1
+configure:18682: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "bsi"
@@ -1138,6 +1171,9 @@ configure: failed program was:
 | #define LT_OBJDIR ".libs/"
 | #define STDC_HEADERS 1
 | #define HAVE_GTV 1
+| #define HAVE_SQT 1
+| #define HAVE_GQR 1
+| #define HAVE_MOP 1
 | #define HAVE_WBFMM 1
 | #define HAVE_BLASWRAP 1
 | #define HAVE_AVX_INSTRUCTIONS 1
@@ -1168,18 +1204,18 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:18521: result: no
-configure:18532: checking for sgemm_ in -ldxml
-configure:18565: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -ldxml  -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
-conftest.c:38:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:18692: result: no
+configure:18703: checking for sgemm_ in -ldxml
+configure:18736: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -ldxml  -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
+conftest.c:41:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  char sgemm_ ();
  ^
-conftest.c:48:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+conftest.c:51:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
 /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/bin/ld: cannot find -ldxml
 collect2: error: ld returned 1 exit status
-configure:18565: $? = 1
+configure:18736: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "bsi"
@@ -1204,6 +1240,9 @@ configure: failed program was:
 | #define LT_OBJDIR ".libs/"
 | #define STDC_HEADERS 1
 | #define HAVE_GTV 1
+| #define HAVE_SQT 1
+| #define HAVE_GQR 1
+| #define HAVE_MOP 1
 | #define HAVE_WBFMM 1
 | #define HAVE_BLASWRAP 1
 | #define HAVE_AVX_INSTRUCTIONS 1
@@ -1234,18 +1273,18 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:18575: result: no
-configure:18690: checking for sgemm_ in -lscs
-configure:18723: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lscs  -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
-conftest.c:38:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:18746: result: no
+configure:18861: checking for sgemm_ in -lscs
+configure:18894: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lscs  -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
+conftest.c:41:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  char sgemm_ ();
  ^
-conftest.c:48:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+conftest.c:51:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
 /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/bin/ld: cannot find -lscs
 collect2: error: ld returned 1 exit status
-configure:18723: $? = 1
+configure:18894: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "bsi"
@@ -1270,6 +1309,9 @@ configure: failed program was:
 | #define LT_OBJDIR ".libs/"
 | #define STDC_HEADERS 1
 | #define HAVE_GTV 1
+| #define HAVE_SQT 1
+| #define HAVE_GQR 1
+| #define HAVE_MOP 1
 | #define HAVE_WBFMM 1
 | #define HAVE_BLASWRAP 1
 | #define HAVE_AVX_INSTRUCTIONS 1
@@ -1300,18 +1342,18 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:18733: result: no
-configure:18744: checking for sgemm_ in -lcomplib.sgimath
-configure:18777: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lcomplib.sgimath  -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
-conftest.c:38:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:18904: result: no
+configure:18915: checking for sgemm_ in -lcomplib.sgimath
+configure:18948: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lcomplib.sgimath  -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
+conftest.c:41:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  char sgemm_ ();
  ^
-conftest.c:48:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+conftest.c:51:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
 /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/bin/ld: cannot find -lcomplib.sgimath
 collect2: error: ld returned 1 exit status
-configure:18777: $? = 1
+configure:18948: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "bsi"
@@ -1336,6 +1378,9 @@ configure: failed program was:
 | #define LT_OBJDIR ".libs/"
 | #define STDC_HEADERS 1
 | #define HAVE_GTV 1
+| #define HAVE_SQT 1
+| #define HAVE_GQR 1
+| #define HAVE_MOP 1
 | #define HAVE_WBFMM 1
 | #define HAVE_BLASWRAP 1
 | #define HAVE_AVX_INSTRUCTIONS 1
@@ -1366,20 +1411,20 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:18787: result: no
-configure:18798: checking for sgemm_ in -lblas
-configure:18841: result: yes
-configure:18845: checking for sgemm_ in -lessl
-configure:18878: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lessl -lblas  -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
-conftest.c:38:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:18958: result: no
+configure:18969: checking for sgemm_ in -lblas
+configure:19012: result: yes
+configure:19016: checking for sgemm_ in -lessl
+configure:19049: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lessl -lblas  -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
+conftest.c:41:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  char sgemm_ ();
  ^
-conftest.c:48:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+conftest.c:51:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
 /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/bin/ld: cannot find -lessl
 collect2: error: ld returned 1 exit status
-configure:18878: $? = 1
+configure:19049: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME "bsi"
@@ -1404,6 +1449,9 @@ configure: failed program was:
 | #define LT_OBJDIR ".libs/"
 | #define STDC_HEADERS 1
 | #define HAVE_GTV 1
+| #define HAVE_SQT 1
+| #define HAVE_GQR 1
+| #define HAVE_MOP 1
 | #define HAVE_WBFMM 1
 | #define HAVE_BLASWRAP 1
 | #define HAVE_AVX_INSTRUCTIONS 1
@@ -1434,22 +1482,22 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:18888: result: no
-configure:18901: checking for sgemm_ in -lblas
-configure:18944: result: yes
-configure:19069: checking for cheev_
-configure:19069: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lm  -lblas  -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
-conftest.c:55:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+configure:19059: result: no
+configure:19072: checking for sgemm_ in -lblas
+configure:19115: result: yes
+configure:19240: checking for cheev_
+configure:19240: gcc -o conftest -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations   conftest.c -lm  -lblas  -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath >&5
+conftest.c:58:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  char cheev_ ();
  ^
-conftest.c:64:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
+conftest.c:67:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
  main ()
  ^
-configure:19069: $? = 0
-configure:19069: result: yes
-configure:19274: checking that generated files are newer than configure
-configure:19280: result: done
-configure:19307: creating ./config.status
+configure:19240: $? = 0
+configure:19240: result: yes
+configure:19445: checking that generated files are newer than configure
+configure:19451: result: done
+configure:19478: creating ./config.status
 
 ## ---------------------- ##
 ## Running config.status. ##
@@ -1466,13 +1514,13 @@ generated by GNU Autoconf 2.69.  Invocation command line was
 
 on michael
 
-config.status:1183: creating Makefile
-config.status:1183: creating src/Makefile
-config.status:1183: creating tools/Makefile
-config.status:1183: creating config.h
-config.status:1364: config.h is unchanged
-config.status:1412: executing depfiles commands
-config.status:1412: executing libtool commands
+config.status:1197: creating Makefile
+config.status:1197: creating src/Makefile
+config.status:1197: creating tools/Makefile
+config.status:1197: creating config.h
+config.status:1378: config.h is unchanged
+config.status:1426: executing depfiles commands
+config.status:1426: executing libtool commands
 
 ## ---------------- ##
 ## Cache variables. ##
@@ -1550,7 +1598,10 @@ ac_cv_path_mkdir=/usr/bin/mkdir
 ac_cv_prog_AWK=gawk
 ac_cv_prog_BLASWRAP=yes
 ac_cv_prog_CPP='gcc -E'
+ac_cv_prog_GQR=yes
 ac_cv_prog_GTV=yes
+ac_cv_prog_MOP=yes
+ac_cv_prog_SQT=yes
 ac_cv_prog_WBFMM=yes
 ac_cv_prog_ac_ct_AR=ar
 ac_cv_prog_ac_ct_CC=gcc
@@ -1633,7 +1684,7 @@ BSI_MINOR_VERSION='1'
 BSI_VERSION='0.1.0'
 CC='gcc'
 CCDEPMODE='depmode=gcc3'
-CFLAGS='-g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -fopenmp  -mavx -DWBFMM_USE_AVX -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -fopenmp -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include -I/home/michael/Codes/include -I/home/michael/Codes/include'
+CFLAGS='-g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -fopenmp  -mavx -DWBFMM_USE_AVX -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -fopenmp -I/home/michael/Codes/include -I/home/michael/Codes/include -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include -I/home/michael/Codes/include -I/home/michael/Codes/include'
 CPP='gcc -E'
 CPPFLAGS=''
 CYGPATH_W='echo'
@@ -1658,6 +1709,7 @@ GLIB_GENMARSHAL='glib-genmarshal'
 GLIB_LIBS='-lglib-2.0'
 GLIB_MKENUMS='glib-mkenums'
 GOBJECT_QUERY='gobject-query'
+GQR='yes'
 GREP='/usr/bin/grep'
 GTV='yes'
 INSTALL_DATA='${INSTALL} -m 644'
@@ -1666,7 +1718,7 @@ INSTALL_SCRIPT='${INSTALL}'
 INSTALL_STRIP_PROGRAM='$(install_sh) -c -s'
 LAPACK_LIBS=''
 LD='/usr/x86_64-slackware-linux/bin/ld -m elf_x86_64'
-LDFLAGS=' -lglib-2.0 -L/home/michael/Codes/lib -lwbfmm -lglib-2.0 -lblas -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lquadmath -lm -L/home/michael/Codes/lib -lgtv -L/usr/lib -lgts -lglib-2.0 -lm -lm'
+LDFLAGS=' -lglib-2.0 -L/home/michael/Codes/lib -lwbfmm -lglib-2.0 -lblas -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lquadmath -lm -L/home/michael/Codes/lib -lsqt -lglib-2.0 -lblas -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath -L/home/michael/Codes/lib -lgqr -lglib-2.0 -lgsl -lgslcblas -lm -lblas -lm -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath -L/home/michael/Codes/lib -lmop -lglib-2.0 -L/usr/lib64 -lgsl -lgslcblas -lm -lblas -lm -L/home/michael/Codes/lib -lgtv -L/usr/lib -lgts -lglib-2.0 -lm -lm'
 LIBOBJS=''
 LIBS='-lglib-2.0  -lblas -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath'
 LIBTOOL='$(SHELL) $(top_builddir)/libtool'
@@ -1681,6 +1733,7 @@ LT_SYS_LIBRARY_PATH=''
 MAKEINFO='${SHELL} /home/michael/Codes/C/bsi/missing makeinfo'
 MANIFEST_TOOL=':'
 MKDIR_P='/usr/bin/mkdir -p'
+MOP='yes'
 NM='/usr/bin/nm -B'
 NMEDIT=''
 OBJDUMP='objdump'
@@ -1703,6 +1756,7 @@ RANLIB='ranlib'
 SED='/usr/bin/sed'
 SET_MAKE=''
 SHELL='/bin/sh'
+SQT='yes'
 STRIP='strip'
 VERSION='0.1.0'
 WBFMM='yes'
@@ -1786,6 +1840,9 @@ target_alias=''
 #define LT_OBJDIR ".libs/"
 #define STDC_HEADERS 1
 #define HAVE_GTV 1
+#define HAVE_SQT 1
+#define HAVE_GQR 1
+#define HAVE_MOP 1
 #define HAVE_WBFMM 1
 #define HAVE_BLASWRAP 1
 #define HAVE_AVX_INSTRUCTIONS 1

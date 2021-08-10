@@ -138,6 +138,58 @@ else
   exit
 fi
 
+AC_CHECK_PROG(SQT, sqt-config, yes, no)
+if test x$SQT = xyes ; then
+   AC_DEFINE(HAVE_SQT, 1, [singular quadrature library available])
+   sqt_cflags=`sqt-config --cflags`
+   sqt_libs=`sqt-config --libs`
+else
+  echo \#################################################################
+  echo \#
+  echo \# Singular Quadrature on Triangles library not installed or
+  echo \# not properly installed. You can get it from
+  echo \#
+  echo \# https://github.com/mjcarley/sqt
+  echo \#
+  echo \#################################################################
+  exit
+fi
+
+AC_CHECK_PROG(GQR, gqr-config, yes, no)
+if test x$GQR = xyes ; then
+   AC_DEFINE(HAVE_GQR, 1, [singular quadrature library available])
+   gqr_cflags=`gqr-config --cflags`
+   gqr_libs=`gqr-config --libs`
+else
+  echo \#################################################################
+  echo \#
+  echo \# Gaussian Quadrature Rules library not installed or
+  echo \# not properly installed. You can get it from
+  echo \#
+  echo \# https://github.com/mjcarley/gqr
+  echo \#
+  echo \#################################################################
+  exit
+fi
+
+AC_CHECK_PROG(MOP, mop-config, yes, no)
+if test x$MOP = xyes ; then
+   AC_DEFINE(HAVE_MOP, 1,
+   		       [multi-variable orthogonal polynomial library available])
+   mop_cflags=`mop-config --cflags`
+   mop_libs=`mop-config --libs`
+else
+  echo \#################################################################
+  echo \#
+  echo \# Multi-variable Orthogonal Polynomial library not installed or
+  echo \# not properly installed. You can get it from
+  echo \#
+  echo \# https://github.com/mjcarley/mop
+  echo \#
+  echo \#################################################################
+  exit
+fi
+
 AC_CHECK_PROG(WBFMM, wbfmm-config, yes, no)
 if test x$WBFMM = xyes ; then
    AC_DEFINE(HAVE_WBFMM, 1, [wide band FMM library available])
@@ -201,8 +253,8 @@ ACX_LAPACK
 blas_libs="$BLAS_LIBS"
 lapack_libs="$LAPACK_LIBS"
 
-CFLAGS="$CFLAGS $OPENMP_CFLAGS $SIMD_FLAGS $glib_cflags $wbfmm_cflags $gtv_cflags $blaswrap_cflags"
-LDFLAGS="$LDFLAGS $glib_libs $wbfmm_libs $gtv_libs"
+CFLAGS="$CFLAGS $OPENMP_CFLAGS $SIMD_FLAGS $glib_cflags $wbfmm_cflags $sqt_cflags $gqr_cflags $mop_cflags $gtv_cflags $blaswrap_cflags"
+LDFLAGS="$LDFLAGS $glib_libs $wbfmm_libs $sqt_libs $gqr_libs $mop_libs $gtv_libs"
 
 AC_SUBST(blas_libs)
 AC_SUBST(lapack_libs)

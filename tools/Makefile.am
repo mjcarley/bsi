@@ -6,10 +6,14 @@ DEPS = $(top_builddir)/src/libbsi.la
 
 bin_PROGRAMS = \
 	bsi-eval \
-	bsi-init
+	bsi-init \
+	bsi-tests
 
 bsi_eval_LDADD = \
 	$(top_builddir)/src/.libs/libbsi.a 
 
 bsi_init_LDADD = \
+	$(top_builddir)/src/.libs/libbsi.a 
+
+bsi_tests_LDADD = \
 	$(top_builddir)/src/.libs/libbsi.a 

@@ -88,7 +88,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = bsi-eval$(EXEEXT) bsi-init$(EXEEXT)
+bin_PROGRAMS = bsi-eval$(EXEEXT) bsi-init$(EXEEXT) bsi-tests$(EXEEXT)
 subdir = tools
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acx_blas.m4 \
@@ -114,6 +114,9 @@ am__v_lt_1 =
 bsi_init_SOURCES = bsi-init.c
 bsi_init_OBJECTS = bsi-init.$(OBJEXT)
 bsi_init_DEPENDENCIES = $(top_builddir)/src/.libs/libbsi.a
+bsi_tests_SOURCES = bsi-tests.c
+bsi_tests_OBJECTS = bsi-tests.$(OBJEXT)
+bsi_tests_DEPENDENCIES = $(top_builddir)/src/.libs/libbsi.a
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -148,8 +151,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = bsi-eval.c bsi-init.c
-DIST_SOURCES = bsi-eval.c bsi-init.c
+SOURCES = bsi-eval.c bsi-init.c bsi-tests.c
+DIST_SOURCES = bsi-eval.c bsi-init.c bsi-tests.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -217,6 +220,7 @@ GLIB_GENMARSHAL = @GLIB_GENMARSHAL@
 GLIB_LIBS = @GLIB_LIBS@
 GLIB_MKENUMS = @GLIB_MKENUMS@
 GOBJECT_QUERY = @GOBJECT_QUERY@
+GQR = @GQR@
 GREP = @GREP@
 GTV = @GTV@
 INSTALL = @INSTALL@
@@ -241,6 +245,7 @@ LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 MAKEINFO = @MAKEINFO@
 MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
+MOP = @MOP@
 NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
@@ -263,6 +268,7 @@ RANLIB = @RANLIB@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
+SQT = @SQT@
 STRIP = @STRIP@
 VERSION = @VERSION@
 WBFMM = @WBFMM@
@@ -327,6 +333,9 @@ bsi_eval_LDADD = \
 	$(top_builddir)/src/.libs/libbsi.a 
 
 bsi_init_LDADD = \
+	$(top_builddir)/src/.libs/libbsi.a 
+
+bsi_tests_LDADD = \
 	$(top_builddir)/src/.libs/libbsi.a 
 
 all: all-am
@@ -420,6 +429,10 @@ bsi-init$(EXEEXT): $(bsi_init_OBJECTS) $(bsi_init_DEPENDENCIES) $(EXTRA_bsi_init
 	@rm -f bsi-init$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(bsi_init_OBJECTS) $(bsi_init_LDADD) $(LIBS)
 
+bsi-tests$(EXEEXT): $(bsi_tests_OBJECTS) $(bsi_tests_DEPENDENCIES) $(EXTRA_bsi_tests_DEPENDENCIES) 
+	@rm -f bsi-tests$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(bsi_tests_OBJECTS) $(bsi_tests_LDADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
@@ -428,6 +441,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bsi-eval.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bsi-init.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bsi-tests.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

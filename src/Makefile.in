@@ -133,7 +133,8 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libbsi_la_LIBADD =
-am_libbsi_la_OBJECTS = bsi.lo
+am_libbsi_la_OBJECTS = bsi.lo quadrature.lo sources.lo rbf.lo \
+	interpolate.lo integrate.lo tetquad.lo
 libbsi_la_OBJECTS = $(am_libbsi_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -246,6 +247,7 @@ GLIB_GENMARSHAL = @GLIB_GENMARSHAL@
 GLIB_LIBS = @GLIB_LIBS@
 GLIB_MKENUMS = @GLIB_MKENUMS@
 GOBJECT_QUERY = @GOBJECT_QUERY@
+GQR = @GQR@
 GREP = @GREP@
 GTV = @GTV@
 INSTALL = @INSTALL@
@@ -270,6 +272,7 @@ LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 MAKEINFO = @MAKEINFO@
 MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
+MOP = @MOP@
 NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
@@ -292,6 +295,7 @@ RANLIB = @RANLIB@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
+SQT = @SQT@
 STRIP = @STRIP@
 VERSION = @VERSION@
 WBFMM = @WBFMM@
@@ -356,7 +360,16 @@ libbsi_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)\
 	-release $(LT_RELEASE) -export-dynamic
 
 libbsi_la_SOURCES = \
-	bsi.c
+	bsi.c \
+	quadrature.c \
+	quadrature.h \
+	sources.c \
+	rbf.c \
+	rbf.h \
+	interpolate.c \
+	integrate.c \
+	tetquad.c \
+	tetquad.h
 
 include_HEADERS = \
 	bsi.h
@@ -441,6 +454,12 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bsi.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/integrate.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/interpolate.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/quadrature.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rbf.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sources.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tetquad.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

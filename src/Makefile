@@ -133,7 +133,8 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libbsi_la_LIBADD =
-am_libbsi_la_OBJECTS = bsi.lo
+am_libbsi_la_OBJECTS = bsi.lo quadrature.lo sources.lo rbf.lo \
+	interpolate.lo integrate.lo tetquad.lo
 libbsi_la_OBJECTS = $(am_libbsi_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -221,7 +222,7 @@ BSI_MINOR_VERSION = 1
 BSI_VERSION = 0.1.0
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -fopenmp  -mavx -DWBFMM_USE_AVX -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -fopenmp -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include -I/home/michael/Codes/include -I/home/michael/Codes/include
+CFLAGS = -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -fopenmp  -mavx -DWBFMM_USE_AVX -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -fopenmp -I/home/michael/Codes/include -I/home/michael/Codes/include -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include -I/home/michael/Codes/include -I/home/michael/Codes/include
 CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo
@@ -246,6 +247,7 @@ GLIB_GENMARSHAL = glib-genmarshal
 GLIB_LIBS = -lglib-2.0
 GLIB_MKENUMS = glib-mkenums
 GOBJECT_QUERY = gobject-query
+GQR = yes
 GREP = /usr/bin/grep
 GTV = yes
 INSTALL = /usr/bin/ginstall -c
@@ -255,7 +257,7 @@ INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LAPACK_LIBS = 
 LD = /usr/x86_64-slackware-linux/bin/ld -m elf_x86_64
-LDFLAGS =  -lglib-2.0 -L/home/michael/Codes/lib -lwbfmm -lglib-2.0 -lblas -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lquadmath -lm -L/home/michael/Codes/lib -lgtv -L/usr/lib -lgts -lglib-2.0 -lm -lm
+LDFLAGS =  -lglib-2.0 -L/home/michael/Codes/lib -lwbfmm -lglib-2.0 -lblas -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lquadmath -lm -L/home/michael/Codes/lib -lsqt -lglib-2.0 -lblas -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath -L/home/michael/Codes/lib -lgqr -lglib-2.0 -lgsl -lgslcblas -lm -lblas -lm -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath -L/home/michael/Codes/lib -lmop -lglib-2.0 -L/usr/lib64 -lgsl -lgslcblas -lm -lblas -lm -L/home/michael/Codes/lib -lgtv -L/usr/lib -lgts -lglib-2.0 -lm -lm
 LIBOBJS = 
 LIBS = -lglib-2.0  -lblas -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
@@ -270,6 +272,7 @@ LT_SYS_LIBRARY_PATH =
 MAKEINFO = ${SHELL} /home/michael/Codes/C/bsi/missing makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /usr/bin/mkdir -p
+MOP = yes
 NM = /usr/bin/nm -B
 NMEDIT = 
 OBJDUMP = objdump
@@ -292,6 +295,7 @@ RANLIB = ranlib
 SED = /usr/bin/sed
 SET_MAKE = 
 SHELL = /bin/sh
+SQT = yes
 STRIP = strip
 VERSION = 0.1.0
 WBFMM = yes
@@ -356,7 +360,16 @@ libbsi_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)\
 	-release $(LT_RELEASE) -export-dynamic
 
 libbsi_la_SOURCES = \
-	bsi.c
+	bsi.c \
+	quadrature.c \
+	quadrature.h \
+	sources.c \
+	rbf.c \
+	rbf.h \
+	interpolate.c \
+	integrate.c \
+	tetquad.c \
+	tetquad.h
 
 include_HEADERS = \
 	bsi.h
@@ -441,6 +454,12 @@ distclean-compile:
 	-rm -f *.tab.c
 
 include ./$(DEPDIR)/bsi.Plo
+include ./$(DEPDIR)/integrate.Plo
+include ./$(DEPDIR)/interpolate.Plo
+include ./$(DEPDIR)/quadrature.Plo
+include ./$(DEPDIR)/rbf.Plo
+include ./$(DEPDIR)/sources.Plo
+include ./$(DEPDIR)/tetquad.Plo
 
 .c.o:
 	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

@@ -88,7 +88,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = x86_64-unknown-linux-gnu
 host_triplet = x86_64-unknown-linux-gnu
-bin_PROGRAMS = bsi-eval$(EXEEXT) bsi-init$(EXEEXT)
+bin_PROGRAMS = bsi-eval$(EXEEXT) bsi-init$(EXEEXT) bsi-tests$(EXEEXT)
 subdir = tools
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acx_blas.m4 \
@@ -114,6 +114,9 @@ am__v_lt_1 =
 bsi_init_SOURCES = bsi-init.c
 bsi_init_OBJECTS = bsi-init.$(OBJEXT)
 bsi_init_DEPENDENCIES = $(top_builddir)/src/.libs/libbsi.a
+bsi_tests_SOURCES = bsi-tests.c
+bsi_tests_OBJECTS = bsi-tests.$(OBJEXT)
+bsi_tests_DEPENDENCIES = $(top_builddir)/src/.libs/libbsi.a
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
 am__v_P_0 = false
@@ -148,8 +151,8 @@ AM_V_CCLD = $(am__v_CCLD_$(V))
 am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = bsi-eval.c bsi-init.c
-DIST_SOURCES = bsi-eval.c bsi-init.c
+SOURCES = bsi-eval.c bsi-init.c bsi-tests.c
+DIST_SOURCES = bsi-eval.c bsi-init.c bsi-tests.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -192,7 +195,7 @@ BSI_MINOR_VERSION = 1
 BSI_VERSION = 0.1.0
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -fopenmp  -mavx -DWBFMM_USE_AVX -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -fopenmp -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include -I/home/michael/Codes/include -I/home/michael/Codes/include
+CFLAGS = -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -fopenmp  -mavx -DWBFMM_USE_AVX -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -fopenmp -I/home/michael/Codes/include -I/home/michael/Codes/include -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include -I/home/michael/Codes/include -I/home/michael/Codes/include
 CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo
@@ -217,6 +220,7 @@ GLIB_GENMARSHAL = glib-genmarshal
 GLIB_LIBS = -lglib-2.0
 GLIB_MKENUMS = glib-mkenums
 GOBJECT_QUERY = gobject-query
+GQR = yes
 GREP = /usr/bin/grep
 GTV = yes
 INSTALL = /usr/bin/ginstall -c
@@ -226,7 +230,7 @@ INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LAPACK_LIBS = 
 LD = /usr/x86_64-slackware-linux/bin/ld -m elf_x86_64
-LDFLAGS =  -lglib-2.0 -L/home/michael/Codes/lib -lwbfmm -lglib-2.0 -lblas -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lquadmath -lm -L/home/michael/Codes/lib -lgtv -L/usr/lib -lgts -lglib-2.0 -lm -lm
+LDFLAGS =  -lglib-2.0 -L/home/michael/Codes/lib -lwbfmm -lglib-2.0 -lblas -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lquadmath -lm -L/home/michael/Codes/lib -lsqt -lglib-2.0 -lblas -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath -L/home/michael/Codes/lib -lgqr -lglib-2.0 -lgsl -lgslcblas -lm -lblas -lm -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath -L/home/michael/Codes/lib -lmop -lglib-2.0 -L/usr/lib64 -lgsl -lgslcblas -lm -lblas -lm -L/home/michael/Codes/lib -lgtv -L/usr/lib -lgts -lglib-2.0 -lm -lm
 LIBOBJS = 
 LIBS = -lglib-2.0  -lblas -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
@@ -241,6 +245,7 @@ LT_SYS_LIBRARY_PATH =
 MAKEINFO = ${SHELL} /home/michael/Codes/C/bsi/missing makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /usr/bin/mkdir -p
+MOP = yes
 NM = /usr/bin/nm -B
 NMEDIT = 
 OBJDUMP = objdump
@@ -263,6 +268,7 @@ RANLIB = ranlib
 SED = /usr/bin/sed
 SET_MAKE = 
 SHELL = /bin/sh
+SQT = yes
 STRIP = strip
 VERSION = 0.1.0
 WBFMM = yes
@@ -327,6 +333,9 @@ bsi_eval_LDADD = \
 	$(top_builddir)/src/.libs/libbsi.a 
 
 bsi_init_LDADD = \
+	$(top_builddir)/src/.libs/libbsi.a 
+
+bsi_tests_LDADD = \
 	$(top_builddir)/src/.libs/libbsi.a 
 
 all: all-am
@@ -420,6 +429,10 @@ bsi-init$(EXEEXT): $(bsi_init_OBJECTS) $(bsi_init_DEPENDENCIES) $(EXTRA_bsi_init
 	@rm -f bsi-init$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(bsi_init_OBJECTS) $(bsi_init_LDADD) $(LIBS)
 
+bsi-tests$(EXEEXT): $(bsi_tests_OBJECTS) $(bsi_tests_DEPENDENCIES) $(EXTRA_bsi_tests_DEPENDENCIES) 
+	@rm -f bsi-tests$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(bsi_tests_OBJECTS) $(bsi_tests_LDADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
@@ -428,6 +441,7 @@ distclean-compile:
 
 include ./$(DEPDIR)/bsi-eval.Po
 include ./$(DEPDIR)/bsi-init.Po
+include ./$(DEPDIR)/bsi-tests.Po
 
 .c.o:
 	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

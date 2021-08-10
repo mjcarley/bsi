@@ -37,6 +37,9 @@
 /* #undef HAVE_FMA_INSTRUCTIONS */
 
 /* singular quadrature library available */
+#define HAVE_GQR 1
+
+/* singular quadrature library available */
 #define HAVE_GTV 1
 
 /* Define to 1 if you have the <inttypes.h> header file. */
@@ -50,6 +53,12 @@
 
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
+
+/* multi-variable orthogonal polynomial library available */
+#define HAVE_MOP 1
+
+/* singular quadrature library available */
+#define HAVE_SQT 1
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
