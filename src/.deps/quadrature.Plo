@@ -10,12 +10,13 @@ quadrature.lo: quadrature.c /usr/include/stdc-predef.h ../config.h \
  /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h \
  /usr/include/gnu/stubs-64.h /usr/include/bits/posix1_lim.h \
  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
- /usr/include/bits/posix2_lim.h \
+ /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h \
+ /usr/include/bits/stdio_lim.h \
  /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/include/float.h \
  /usr/include/glib-2.0/glib/gversionmacros.h /usr/include/time.h \
  /usr/include/bits/time.h /usr/include/bits/types.h \
- /usr/include/bits/typesizes.h /usr/include/xlocale.h \
- /usr/include/glib-2.0/glib/garray.h \
+ /usr/include/bits/typesizes.h /usr/include/bits/timex.h \
+ /usr/include/xlocale.h /usr/include/glib-2.0/glib/garray.h \
  /usr/include/glib-2.0/glib/gasyncqueue.h \
  /usr/include/glib-2.0/glib/gthread.h \
  /usr/include/glib-2.0/glib/gatomic.h /usr/include/glib-2.0/glib/gerror.h \
@@ -126,6 +127,10 @@ quadrature.lo: quadrature.c /usr/include/stdc-predef.h ../config.h \
 
 /usr/include/bits/posix2_lim.h:
 
+/usr/include/bits/xopen_lim.h:
+
+/usr/include/bits/stdio_lim.h:
+
 /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/include/float.h:
 
 /usr/include/glib-2.0/glib/gversionmacros.h:
@@ -137,6 +142,8 @@ quadrature.lo: quadrature.c /usr/include/stdc-predef.h ../config.h \
 /usr/include/bits/types.h:
 
 /usr/include/bits/typesizes.h:
+
+/usr/include/bits/timex.h:
 
 /usr/include/xlocale.h:
 

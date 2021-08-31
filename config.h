@@ -57,9 +57,6 @@
 /* multi-variable orthogonal polynomial library available */
 #define HAVE_MOP 1
 
-/* singular quadrature library available */
-#define HAVE_SQT 1
-
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
 

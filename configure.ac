@@ -38,11 +38,15 @@ PACKAGE=bsi
 
 # Checks for programs.
 AC_PROG_CC
+AC_PROG_CXX
 
 if test x$GCC = xyes ; then
-  CFLAGS="$CFLAGS -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations"
+  CFLAGS="$CFLAGS -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE"
 fi
-
+if test x$GXX = xyes ; then
+  CXXFLAGS="$CXXFLAGS -Wall -Werror-implicit-function-declaration -Wmissing-declarations"
+fi
+  
 AC_PROG_AWK
 AC_SEARCH_LIBS([strerror],[cposix])
 AC_HEADER_STDC
@@ -92,7 +96,6 @@ else
       AC_MSG_ERROR([GLIB directory ($with_glib) not present or not configured])
     fi
 
-    # For use in wmpi-config
     glib_cflags=`$GLIB_CONFIG --cflags`
     glib_thread_cflags=`$GLIB_CONFIG --cflags gthread`
     glib_module_cflags=`$GLIB_CONFIG --cflags gmodule`
@@ -133,23 +136,6 @@ else
   echo \# not properly installed. You can get it from
   echo \#
   echo \# https://github.com/mjcarley/gtv
-  echo \#
-  echo \#################################################################
-  exit
-fi
-
-AC_CHECK_PROG(SQT, sqt-config, yes, no)
-if test x$SQT = xyes ; then
-   AC_DEFINE(HAVE_SQT, 1, [singular quadrature library available])
-   sqt_cflags=`sqt-config --cflags`
-   sqt_libs=`sqt-config --libs`
-else
-  echo \#################################################################
-  echo \#
-  echo \# Singular Quadrature on Triangles library not installed or
-  echo \# not properly installed. You can get it from
-  echo \#
-  echo \# https://github.com/mjcarley/sqt
   echo \#
   echo \#################################################################
   exit
@@ -239,6 +225,11 @@ if test x$hasfma = xyes; then
 fi
 
 AC_CHECK_LIB(m, cos)
+#AC_LANG_PUSH([C++])
+##AX_CXX_CHECK_LIB(tet, [tetgenio::initialize])
+##AC_LANG_POP([C++])
+##AC_CHECK_LIB(tet, tetrahedralize)
+
 AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for library functions.
@@ -253,8 +244,9 @@ ACX_LAPACK
 blas_libs="$BLAS_LIBS"
 lapack_libs="$LAPACK_LIBS"
 
-CFLAGS="$CFLAGS $OPENMP_CFLAGS $SIMD_FLAGS $glib_cflags $wbfmm_cflags $sqt_cflags $gqr_cflags $mop_cflags $gtv_cflags $blaswrap_cflags"
-LDFLAGS="$LDFLAGS $glib_libs $wbfmm_libs $sqt_libs $gqr_libs $mop_libs $gtv_libs"
+CFLAGS="$CFLAGS $OPENMP_CFLAGS $SIMD_FLAGS $glib_cflags $wbfmm_cflags $gqr_cflags $mop_cflags $gtv_cflags $blaswrap_cflags"
+CXXFLAGS="-DTETLIBRARY $CXXFLAGS $OPENMP_CFLAGS $SIMD_FLAGS $glib_cflags $wbfmm_cflags $gqr_cflags $mop_cflags $gtv_cflags $blaswrap_cflags"
+LDFLAGS="$LDFLAGS $glib_libs $wbfmm_libs $gqr_libs $mop_libs $gtv_libs -lstdc++"
 
 AC_SUBST(blas_libs)
 AC_SUBST(lapack_libs)

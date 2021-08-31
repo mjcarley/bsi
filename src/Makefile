@@ -134,15 +134,16 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libbsi_la_LIBADD =
 am_libbsi_la_OBJECTS = bsi.lo quadrature.lo sources.lo rbf.lo \
-	interpolate.lo integrate.lo tetquad.lo
+	interpolate.lo tetquad.lo tetwrap.lo tetgen.lo predicates.lo \
+	duffy-tet.lo
 libbsi_la_OBJECTS = $(am_libbsi_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libbsi_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(libbsi_la_LDFLAGS) $(LDFLAGS) -o $@
+libbsi_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(libbsi_la_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
 am__v_P_0 = false
@@ -177,6 +178,24 @@ AM_V_CCLD = $(am__v_CCLD_$(V))
 am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
+CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CXXFLAGS) $(CXXFLAGS)
+AM_V_CXX = $(am__v_CXX_$(V))
+am__v_CXX_ = $(am__v_CXX_$(AM_DEFAULT_VERBOSITY))
+am__v_CXX_0 = @echo "  CXX     " $@;
+am__v_CXX_1 = 
+CXXLD = $(CXX)
+CXXLINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+AM_V_CXXLD = $(am__v_CXXLD_$(V))
+am__v_CXXLD_ = $(am__v_CXXLD_$(AM_DEFAULT_VERBOSITY))
+am__v_CXXLD_0 = @echo "  CXXLD   " $@;
+am__v_CXXLD_1 = 
 SOURCES = $(libbsi_la_SOURCES)
 DIST_SOURCES = $(libbsi_la_SOURCES)
 am__can_run_installinfo = \
@@ -222,9 +241,13 @@ BSI_MINOR_VERSION = 1
 BSI_VERSION = 0.1.0
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -fopenmp  -mavx -DWBFMM_USE_AVX -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -fopenmp -I/home/michael/Codes/include -I/home/michael/Codes/include -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include -I/home/michael/Codes/include -I/home/michael/Codes/include
+CFLAGS = -O3 -g -Wall -Werror-implicit-function-declaration -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -D_GNU_SOURCE -fopenmp  -mavx -DWBFMM_USE_AVX -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -fopenmp -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include -I/home/michael/Codes/include -I/home/michael/Codes/include
 CPP = gcc -E
 CPPFLAGS = 
+CXX = g++
+CXXCPP = g++ -E
+CXXDEPMODE = depmode=gcc3
+CXXFLAGS = -DTETLIBRARY -g -O2 -Wall -Werror-implicit-function-declaration -Wmissing-declarations -fopenmp  -mavx -DWBFMM_USE_AVX -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -fopenmp -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/home/michael/Codes/include -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include -I/home/michael/Codes/include -I/home/michael/Codes/include
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -257,7 +280,7 @@ INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LAPACK_LIBS = 
 LD = /usr/x86_64-slackware-linux/bin/ld -m elf_x86_64
-LDFLAGS =  -lglib-2.0 -L/home/michael/Codes/lib -lwbfmm -lglib-2.0 -lblas -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lquadmath -lm -L/home/michael/Codes/lib -lsqt -lglib-2.0 -lblas -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath -L/home/michael/Codes/lib -lgqr -lglib-2.0 -lgsl -lgslcblas -lm -lblas -lm -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath -L/home/michael/Codes/lib -lmop -lglib-2.0 -L/usr/lib64 -lgsl -lgslcblas -lm -lblas -lm -L/home/michael/Codes/lib -lgtv -L/usr/lib -lgts -lglib-2.0 -lm -lm
+LDFLAGS =  -lglib-2.0 -L/home/michael/Codes/lib -lwbfmm -lglib-2.0 -lblas -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lquadmath -lm -L/home/michael/Codes/lib -lgqr -lglib-2.0 -lgsl -lgslcblas -lm -lblas -lm -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath -L/home/michael/Codes/lib -lmop -lglib-2.0 -lblas -lm -L/home/michael/Codes/lib -lgtv -L/usr/lib -lgts -lglib-2.0 -lm -lm -lstdc++
 LIBOBJS = 
 LIBS = -lglib-2.0  -lblas -lm   -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../../../x86_64-slackware-linux/lib -L/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/../../.. -lgfortran -lm -lquadmath
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
@@ -295,7 +318,6 @@ RANLIB = ranlib
 SED = /usr/bin/sed
 SET_MAKE = 
 SHELL = /bin/sh
-SQT = yes
 STRIP = strip
 VERSION = 0.1.0
 WBFMM = yes
@@ -305,6 +327,7 @@ abs_top_builddir = /home/michael/Codes/C/bsi
 abs_top_srcdir = /home/michael/Codes/C/bsi
 ac_ct_AR = ar
 ac_ct_CC = gcc
+ac_ct_CXX = g++
 ac_ct_DUMPBIN = 
 ac_ct_F77 = g77
 am__include = include
@@ -367,9 +390,16 @@ libbsi_la_SOURCES = \
 	rbf.c \
 	rbf.h \
 	interpolate.c \
-	integrate.c \
 	tetquad.c \
-	tetquad.h
+	tetquad.h \
+	tetwrap.c++ \
+	tetwrap.h \
+	bsi-private.h \
+	tetgen.h \
+	tetgen.cxx \
+	predicates.cxx \
+	duffy-tet.c \
+	duffy.h
 
 include_HEADERS = \
 	bsi.h
@@ -378,7 +408,7 @@ CLEANFILES = $(BUILT_SOURCES)
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .c .lo .o .obj
+.SUFFIXES: .c .c++ .cxx .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -445,7 +475,7 @@ clean-libLTLIBRARIES:
 	}
 
 libbsi.la: $(libbsi_la_OBJECTS) $(libbsi_la_DEPENDENCIES) $(EXTRA_libbsi_la_DEPENDENCIES) 
-	$(AM_V_CCLD)$(libbsi_la_LINK) -rpath $(libdir) $(libbsi_la_OBJECTS) $(libbsi_la_LIBADD) $(LIBS)
+	$(AM_V_CXXLD)$(libbsi_la_LINK) -rpath $(libdir) $(libbsi_la_OBJECTS) $(libbsi_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -454,12 +484,15 @@ distclean-compile:
 	-rm -f *.tab.c
 
 include ./$(DEPDIR)/bsi.Plo
-include ./$(DEPDIR)/integrate.Plo
+include ./$(DEPDIR)/duffy-tet.Plo
 include ./$(DEPDIR)/interpolate.Plo
+include ./$(DEPDIR)/predicates.Plo
 include ./$(DEPDIR)/quadrature.Plo
 include ./$(DEPDIR)/rbf.Plo
 include ./$(DEPDIR)/sources.Plo
+include ./$(DEPDIR)/tetgen.Plo
 include ./$(DEPDIR)/tetquad.Plo
+include ./$(DEPDIR)/tetwrap.Plo
 
 .c.o:
 	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -481,6 +514,48 @@ include ./$(DEPDIR)/tetquad.Plo
 #	$(AM_V_CC)source='$<' object='$@' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
 #	$(AM_V_CC_no)$(LTCOMPILE) -c -o $@ $<
+
+.c++.o:
+	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+#	$(AM_V_CXX)source='$<' object='$@' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXXCOMPILE) -c -o $@ $<
+
+.c++.obj:
+	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+#	$(AM_V_CXX)source='$<' object='$@' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.c++.lo:
+	$(AM_V_CXX)$(LTCXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
+#	$(AM_V_CXX)source='$<' object='$@' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(LTCXXCOMPILE) -c -o $@ $<
+
+.cxx.o:
+	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+#	$(AM_V_CXX)source='$<' object='$@' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXXCOMPILE) -c -o $@ $<
+
+.cxx.obj:
+	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+#	$(AM_V_CXX)source='$<' object='$@' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.cxx.lo:
+	$(AM_V_CXX)$(LTCXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
+#	$(AM_V_CXX)source='$<' object='$@' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(LTCXXCOMPILE) -c -o $@ $<
 
 mostlyclean-libtool:
 	-rm -f *.lo

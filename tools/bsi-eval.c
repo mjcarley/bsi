@@ -34,6 +34,15 @@
 #include "quadrature.h"
 #include "tetquad.h"
 
+#include "duffy.h"
+
+#define REAL gdouble
+REAL orient3d(REAL *pa, REAL *pb, REAL *pc, REAL *pd);
+
+#define SIGN(_x) ((_x) < 0.0 ? -1 : ((_x) > 0.0 ? 1 : 0))
+
+#include "bsi-private.h"
+
 /* #define BSI_UNCORRECTED */
 
 gchar *progname ;
@@ -70,25 +79,48 @@ gint bsi_eval_velocity(gdouble *x, gint xstr, gdouble *f, gint fstr,
    (BSI_C)[1] = (BSI_A)[2]*(BSI_B)[0] - (BSI_A)[0]*(BSI_B)[2],		\
    (BSI_C)[2] = (BSI_A)[0]*(BSI_B)[1] - (BSI_A)[1]*(BSI_B)[0])
 
-static gint read_nodes(FILE *f, GtsVertex **nodes, gdouble **data,
+static void invert3x3(gdouble *Ai, gdouble *A)
+
+{
+  gdouble det ;
+
+  det = 
+    A[0]*(A[8]*A[4]-A[7]*A[5]) - 
+    A[3]*(A[8]*A[1]-A[7]*A[2]) +
+    A[6]*(A[5]*A[1]-A[4]*A[2]) ;
+  det = 1.0/det ;
+
+  Ai[0] =  det*(A[8]*A[4] - A[7]*A[5]) ;
+  Ai[1] = -det*(A[8]*A[1] - A[7]*A[2]) ;
+  Ai[2] =  det*(A[5]*A[1] - A[4]*A[2]) ;
+
+  Ai[3] = -det*(A[8]*A[3] - A[6]*A[5]) ;
+  Ai[4] =  det*(A[8]*A[0] - A[6]*A[2]) ;
+  Ai[5] = -det*(A[5]*A[0] - A[3]*A[2]) ;
+
+  Ai[6] =  det*(A[7]*A[3] - A[6]*A[4]) ;
+  Ai[7] = -det*(A[7]*A[0] - A[6]*A[1]) ;
+  Ai[8] =  det*(A[4]*A[0] - A[3]*A[1]) ;
+
+  return ;
+}
+
+static gint read_nodes(FILE *f, gdouble **nodes, gdouble **data,
 		       gint *nnodes, gint *nd)
 
 {
   gint i, j ;
-  gdouble x, y, z ;
-  GtsVertex *v ;
 
   fscanf(f, "%d", nnodes) ;
   fscanf(f, "%d", nd) ;
 
-  *nodes = (GtsVertex *)g_malloc0((*nnodes)*sizeof(GtsVertex)) ;
-  *data  = (gdouble   *)g_malloc0((*nnodes)*(*nd)*sizeof(gdouble)) ;
+  *nodes = (gdouble *)g_malloc0((*nnodes)*3*sizeof(gdouble)) ;
+  *data  = (gdouble *)g_malloc0((*nnodes)*(*nd)*sizeof(gdouble)) ;
 
   for ( i = 0 ; i < *nnodes ; i ++ ) {
-    fscanf(f, "%lg %lg %lg", &x, &y, &z) ;
-    v = gts_vertex_new(gts_vertex_class(), x, y, z) ;
-    memcpy(&((*nodes)[i]), v, sizeof(GtsVertex)) ;
-    gts_object_destroy(GTS_OBJECT(v)) ;
+    fscanf(f, "%lg", &((*nodes)[3*i+0])) ;
+    fscanf(f, "%lg", &((*nodes)[3*i+1])) ;
+    fscanf(f, "%lg", &((*nodes)[3*i+2])) ;
     for ( j = 0 ; j < (*nd) ; j ++ )
       fscanf(f, "%lg", &((*data)[i*(*nd)+j])) ;
   }
@@ -96,51 +128,20 @@ static gint read_nodes(FILE *f, GtsVertex **nodes, gdouble **data,
   return 0 ;
 }
 
-gboolean cell_match(GtsVertex *v[])
+static gint tetrahedron_bs_func(gdouble *y, gdouble *s, gdouble R,
+				gdouble wt, gdouble *u, gint nu,
+				gpointer data[])
 
 {
-  gdouble xc[] = {1, 0, 0,
-		  1.01894, 0.0170455, -0.0104167,
-		  1.00568, 0.0246212, -0.00347222,
-		  0.996212, 0.0132576, -0.0173611} ;
-  gdouble tol = 1e-3 ;
-  gint i, j ;
-  gboolean match ;
-  
-  for ( i = 0 ; i < 4 ; i ++ ) {
-    match = FALSE ;
-    for ( j = 0 ; j < 4 ; j ++ ) {
-      if ( fabs(GTS_POINT(v[i])->x - xc[3*j+0]) < tol &&
-	   fabs(GTS_POINT(v[i])->y - xc[3*j+1]) < tol &&
-	   fabs(GTS_POINT(v[i])->z - xc[3*j+2]) < tol ) {
-	match = TRUE ;
-      }	
-    }
-
-    if ( match == FALSE ) return FALSE ;
-  }
-
-  return TRUE ;
-}
-
-gint tetrahedron_bs_func(gdouble *y, gdouble *s, gdouble R,
-			 gdouble wt, gdouble *u, gint nu,
-			 gpointer data[])
-/* bsi_polynomial_t *p) */
-
-{
-  bsi_polynomial_t *p = data[0] ;
+  /* bsi_polynomial_t *p = data[0] ; */
   gdouble rw[3], w[3] ;
-
-  /* g_assert(wt > 0.0) ; */
-
 
   /*vector s is the unit vector from the evaluation point to the
     quadrature point (Rs = y-x)*/
   
-  bsi_polynomial_evaluate(p, y, w) ;  
+  /* bsi_polynomial_evaluate(p, y, w) ;   */
 
-#if 1
+  bsi_source_func_ring_gaussian(y, w, 3, NULL) ;
   tq_vector_cross(rw, w, s) ;
   /* tq_vector_cross(rw, s, w) ; */
 
@@ -149,107 +150,91 @@ gint tetrahedron_bs_func(gdouble *y, gdouble *s, gdouble R,
   u[2] -= rw[2]/R/R*0.25*M_1_PI*wt ;
 
   return 0 ;
-#else
-  gdouble *x = data[1] ;
-  gdouble r[3], R3 ;
-  tq_vector_init(r, y, x) ;
-  bsi_vector_cross(rw, r, w) ;
-  
-  R3 = tq_vector_length2(r) ;
-  R3 *= sqrt(R3)*4.0*M_PI ;
-  
-  u[0] -= rw[0]/R3*wt ;
-  u[1] -= rw[1]/R3*wt ;
-  u[2] -= rw[2]/R3*wt ;
-#endif
+}
+
+static gint tetrahedron_duffy_func(gdouble *y, gdouble *x, gdouble wt,
+				   gdouble *u, gint nu, gpointer data)
+
+{
+  gdouble s[3], w[3], sw[3], r ;
+
+  bsi_source_func_ring_gaussian(y, w, 3, NULL) ;
+
+  duffy_vector3(s, x, y) ;
+  r = sqrt(duffy_length3sqr(s)) ;
+  s[0] /= r ; s[1] /= r ; s[2] /= r ; 
+  duffy_cross3(sw, w, s) ;
+
+  u[0] -= sw[0]*0.25*M_1_PI*wt ;
+  u[1] -= sw[1]*0.25*M_1_PI*wt ;
+  u[2] -= sw[2]*0.25*M_1_PI*wt ;
   
   return 0 ;
 }
 
-static void quadrature_nodes(GtvCell *c, gpointer *data)
+static void quadrature_nodes_tetgen(gint tet[4], gpointer *data)
 
 {
-  GtsVertex *x = data[BSI_DATA_VERTICES] ;
+  gdouble *x = data[BSI_DATA_VERTICES] ;
   gdouble *xq =  data[BSI_DATA_QUAD_NODES] ;
   gdouble *q =   data[BSI_DATA_QUAD_RULE] ;
   gint nq =     *((gint *)data[BSI_DATA_QUAD_NUMBER]) ;
   gint nf =     *((gint *)data[BSI_DATA_VECTOR_SIZE]) ;
-  gint iorder = *((gint *)data[BSI_DATA_INTERP_ORDER]) ;
+  /* gint iorder = *((gint *)data[BSI_DATA_INTERP_ORDER]) ; */
   gint fstr =   *((gint *)data[BSI_DATA_NODE_STRIDE]) ;
   gint *ntf =    data[BSI_DATA_TET_COUNT] ;
   gdouble *f =   data[BSI_DATA_NODE_DATA] ;
   gdouble *u =   data[BSI_DATA_VELOCITY] ;
-  gdouble *fn =  data[BSI_DATA_VERTEX_DATA] ;
+  /* gdouble *fn =  data[BSI_DATA_VERTEX_DATA] ; */
 #ifdef BSI_INTERPOLATE_RBF
   bsi_interpolator_t *rbf = data[BSI_DATA_INTERPOLATOR] ;
   gdouble *work = data[BSI_DATA_WORKSPACE] ;
-  GtvVolume *v = data[BSI_DATA_VOLUME] ;
 #else /*BSI_INTERPOLATE_RBF*/
   bsi_polynomial_t *pb = data[BSI_DATA_INTERPOLATOR] ;
-  bsi_polynomial_workspace_t *wpb = data[BSI_DATA_WORKSPACE]    ;
+  /* bsi_polynomial_workspace_t *wpb = data[BSI_DATA_WORKSPACE]    ; */
 #endif /*BSI_INTERPOLATE_RBF*/
   gqr_rule_t *qp = data[BSI_DATA_QUADRATURE_PHI] ;
   gqr_rule_t *qt = data[BSI_DATA_QUADRATURE_TH] ;
   gqr_rule_t *qr = data[BSI_DATA_QUADRATURE_R] ;
-  GtsVertex *vt[4] ;
   gdouble L[4], J, r[3], *xquad, *fquad ;
-  gint i, j, str, idx[4], rot[] = {0, 1, 2, 3, 0, 1, 2} ;
+  gint i, j, str, rot[] = {0, 1, 2, 3, 0, 1, 2} ;
 
   str = 3+nf ;
-  J = fabs(gtv_tetrahedron_volume(GTV_TETRAHEDRON(c))) ;
 
-  if ( J < 1e-12 ) return ;
+  J = fabs(orient3d(&(x[3*tet[0]]), &(x[3*tet[1]]), &(x[3*tet[2]]),
+		    &(x[3*tet[3]])))/6.0 ;
   
-  gtv_tetrahedron_vertices(GTV_TETRAHEDRON(c),
-			   &(vt[0]), &(vt[1]), &(vt[2]), &(vt[3])) ;
-  /*for local corrections on cell vertices*/
-  bsi_cell_indices(c, x, &(idx[0]), &(idx[1]), &(idx[2]), &(idx[3])) ;
+  if ( J < 1e-12 ) return ;
   
 #ifdef BSI_INTERPOLATE_RBF
   /* bsi_rbf_parameter_fit_cell(c, x, fn, nf, nf, rbf, work) ; */
   bsi_rbf_parameter_fit(x, idx[0], v, fn, nf, nf, rbf, work) ;
 #else /*BSI_INTERPOLATE_RBF*/
-  bsi_polynomial_cell_interpolant(c, x, fn, nf, nf, 5, pb,
-				  iorder, wpb) ;
+  /* bsi_polynomial_cell_interpolant(c, x, fn, nf, nf, 5, pb, */
+  /* 				  iorder, wpb) ; */
 #endif /*BSI_INTERPOLATE_RBF*/  
-
-  /* if ( cell_match(vt) ) { */
-  /*   for ( i = 0 ; i < 4 ; i ++ )  */
-  /*     fprintf(stdout, "%lg %lg %lg\n",  */
-  /* 	      GTS_POINT(vt[i])->x, GTS_POINT(vt[i])->y, GTS_POINT(vt[i])->z) ; */
-
-  /*   for ( i = 0 ; i < bsi_poly_coefficient_3d_offset(pb->order+1) ; i ++ ) { */
-  /*     fprintf(stdout, "%lg %lg %lg\n", */
-  /* 	      pb->c[3*i+0], pb->c[3*i+1], pb->c[3*i+2]) ; */
-  /*   } */
-    
-  /*   exit(0) ; */
-  /* } */
   
   for ( i = 0 ; i < nq ; i ++ ) {
     L[1] = q[4*i+0] ; L[2] = q[4*i+1] ; L[3] = q[4*i+2] ;
     L[0] = 1.0 - L[1] - L[2] - L[3] ;
     xquad = &(xq[(*ntf)*str]) ;
     fquad = &(f[(*ntf)*fstr]) ;
-    xquad[0] = 
-      L[0]*GTS_POINT(vt[0])->x + L[1]*GTS_POINT(vt[1])->x + 
-      L[2]*GTS_POINT(vt[2])->x + L[3]*GTS_POINT(vt[3])->x ;
-    xquad[1] = 
-      L[0]*GTS_POINT(vt[0])->y + L[1]*GTS_POINT(vt[1])->y + 
-      L[2]*GTS_POINT(vt[2])->y + L[3]*GTS_POINT(vt[3])->y ;
-    xquad[2] = 
-      L[0]*GTS_POINT(vt[0])->z + L[1]*GTS_POINT(vt[1])->z + 
-      L[2]*GTS_POINT(vt[2])->z + L[3]*GTS_POINT(vt[3])->z ;
+    xquad[0] = L[0]*x[3*tet[0]+0] + L[1]*x[3*tet[1]+0] +
+      L[2]*x[3*tet[2]+0] + L[3]*x[3*tet[3]+0] ; 
+    xquad[1] = L[0]*x[3*tet[0]+1] + L[1]*x[3*tet[1]+1] +
+      L[2]*x[3*tet[2]+1] + L[3]*x[3*tet[3]+1] ; 
+    xquad[2] = L[0]*x[3*tet[0]+2] + L[1]*x[3*tet[1]+2] +
+      L[2]*x[3*tet[2]+2] + L[3]*x[3*tet[3]+2] ; 
 
     fquad[0] = fquad[1] = fquad[2] = 0.0 ;
 
 #ifdef BSI_INTERPOLATE_RBF
     bsi_rbf_evaluate(rbf, x, xquad, nf, fquad) ;
 #else /*BSI_INTERPOLATE_RBF*/
-    bsi_polynomial_evaluate(pb, xquad, fquad) ;
+    /* bsi_polynomial_evaluate(pb, xquad, fquad) ; */
 #endif /*BSI_INTERPOLATE_RBF*/
 
-    /* bsi_source_func_ring_gaussian(xquad, fquad, nf, NULL) ; */
+    bsi_source_func_ring_gaussian(xquad, fquad, nf, NULL) ;
     
     fquad[0] *= J*q[4*i+3] ;
     fquad[1] *= J*q[4*i+3] ;
@@ -257,28 +242,19 @@ static void quadrature_nodes(GtvCell *c, gpointer *data)
 
 #ifndef BSI_UNCORRECTED
     for ( j = 0 ; j < 4 ; j ++ ) {
-    /* for ( j = 0 ; j < 0 ; j ++ ) { */
       gdouble rw[3], R ;
 
-      r[0] = GTS_POINT(vt[j])->x - xquad[0] ;
-      r[1] = GTS_POINT(vt[j])->y - xquad[1] ;
-      r[2] = GTS_POINT(vt[j])->z - xquad[2] ;
-
+      tq_vector_init(r, xquad, &(x[3*tet[j]])) ;
+      
       R = sqrt(r[0]*r[0] + r[1]*r[1] + r[2]*r[2]) ;
       R *= R*R*4.0*M_PI ;
     
       bsi_vector_cross(rw, r, fquad) ;
-      u[idx[j]*3+0] += rw[0]/R ;
-      u[idx[j]*3+1] += rw[1]/R ;
-      u[idx[j]*3+2] += rw[2]/R ;
+      u[tet[j]*3+0] += rw[0]/R ;
+      u[tet[j]*3+1] += rw[1]/R ;
+      u[tet[j]*3+2] += rw[2]/R ;
     }
 #endif /*BSI_UNCORRECTED*/
-    /* fprintf(stdout, */
-    /* 	    "%1.16e %1.16e %1.16e %1.16e %1.16e %1.16e\n", */
-    /* 	    xquad[0], xquad[1], xquad[2],  */
-    /* 	    fquad[0], fquad[1], fquad[2] */
-    /* 	    ) ; */
-    
     (*ntf) ++ ;
   }
 #ifdef BSI_UNCORRECTED
@@ -289,79 +265,29 @@ static void quadrature_nodes(GtvCell *c, gpointer *data)
   for ( i = 0 ; i < 4 ; i ++ ) {
     gpointer fdata[2] ;
     fdata[0] = pb ;
-    fdata[1] = &(GTS_POINT(vt[rot[i+0]])->x) ;
-    tq_tet_quad(&(GTS_POINT(vt[rot[i+0]])->x),
-		&(GTS_POINT(vt[rot[i+1]])->x),
-		&(GTS_POINT(vt[rot[i+2]])->x),
-		&(GTS_POINT(vt[rot[i+3]])->x),
-		&(gqr_rule_abscissa(qp,0)), 1, &(gqr_rule_weight(qp,0)), 1,
-		gqr_rule_length(qp),
-		&(gqr_rule_abscissa(qt,0)), 1, &(gqr_rule_weight(qt,0)), 1,
-		gqr_rule_length(qt),
-		&(gqr_rule_abscissa(qr,0)), 1, &(gqr_rule_weight(qr,0)), 1,
-		gqr_rule_length(qr),
-		tetrahedron_bs_func, fdata,
-		/* pb, */
-		&(u[idx[i]*3]), 3) ;
-  /* tq_tet_quad(&(x[3*rot[i+0]]), &(x[3*rot[i+3]]), */
-  /* 		&(x[3*rot[i+2]]), &(x[3*rot[i+1]]),  */
-  /* 		&(gqr_rule_abscissa(qp,0)), 1, &(gqr_rule_weight(qp,0)), 1, */
-  /* 		ngp, */
-  /* 		&(gqr_rule_abscissa(qt,0)), 1, &(gqr_rule_weight(qt,0)), 1, */
-  /* 		ngt, */
-  /* 		&(gqr_rule_abscissa(qr,0)), 1, &(gqr_rule_weight(qr,0)), 1, */
-  /* 		ngr, */
-  /* 		volume_test_func, NULL, */
-  /* 		&(q[i*nq]), nq) ; */
-  }
-
-#if 0
-  /*local volume integration using interpolant*/
-  for ( id = 0 ; id < 4 ; id ++ ) {
-    /* gdouble V ; */
-    /* V = gtv_tetrahedron_volume(GTV_TETRAHEDRON(c)) ; */
-    
-    bsi_tet_integrate_powers(&(GTS_POINT(vt[rot[id+0]])->x),
-			     &(GTS_POINT(vt[rot[id+1]])->x),
-  			     &(GTS_POINT(vt[rot[id+2]])->x),
-			     &(GTS_POINT(vt[rot[id+3]])->x),
-  			     iorder+1, 175, 1e-12, 12, P) ;
-
-    /* fprintf(stderr, "%lg %lg\n", V, P[0]) ; */
-    
-    bsi_polynomial_shift_origin(pb, &(GTS_POINT(vt[rot[id]])->x), wpb) ;
-    for ( n = 0 ; n <= iorder ; n ++ ) {
-      for ( i = 0 ; i <= n ; i ++ ) {
-	for ( j = 0 ; j <= n-i ; j ++ ) {
-	  k = n - i - j ;
-	  ic = bsi_poly_coefficient_3d_index(i,j  ,k) ;
-	  ip = bsi_poly_coefficient_3d_index(i  ,j+1,k  ) ;
-	  u[3*idx[rot[id]]+0] -= P[ip]*pb->c[3*ic+2] ;
-	  /* u[3*idx[rot[id]]+0] += P[ip]*pb->c[3*ic+2] ; */
-	  ip = bsi_poly_coefficient_3d_index(i  ,j  ,k+1) ;
-	  u[3*idx[rot[id]]+0] += P[ip]*pb->c[3*ic+1] ;
-	  /* u[3*idx[rot[id]]+0] -= P[ip]*pb->c[3*ic+1] ; */
-
-	  ip = bsi_poly_coefficient_3d_index(i  ,j  ,k+1) ;
-	  u[3*idx[rot[id]]+1] -= P[ip]*pb->c[3*ic+0] ;
-	  /* u[3*idx[rot[id]]+1] += P[ip]*pb->c[3*ic+0] ; */
-	  ip = bsi_poly_coefficient_3d_index(i+1,j  ,k  ) ;
-	  u[3*idx[rot[id]]+1] += P[ip]*pb->c[3*ic+2] ;
-	  /* u[3*idx[rot[id]]+1] -= P[ip]*pb->c[3*ic+2] ; */
-	  
-	  ip = bsi_poly_coefficient_3d_index(i+1,j  ,k  ) ;
-	  u[3*idx[rot[id]]+2] -= P[ip]*pb->c[3*ic+1] ;
-	  /* u[3*idx[rot[id]]+2] += P[ip]*pb->c[3*ic+1] ; */
-	  ip = bsi_poly_coefficient_3d_index(i  ,j+1,k  ) ;
-	  u[3*idx[rot[id]]+2] += P[ip]*pb->c[3*ic+0] ;
-	  /* u[3*idx[rot[id]]+2] -= P[ip]*pb->c[3*ic+0] ; */
-	}
-      }
-    }
+    /* duffy_tet_quad(&(x[3*tet[rot[i+0]]]), &(x[3*tet[rot[i+1]]]), */
+    /* 		   &(x[3*tet[rot[i+2]]]), &(x[3*tet[rot[i+3]]]), */
+    /* 		   2.0, 2.0, */
+    /* 		   &(gqr_rule_abscissa(qp,0)), 1, &(gqr_rule_weight(qp,0)), 1, */
+    /* 		   gqr_rule_length(qp), */
+    /* 		   &(gqr_rule_abscissa(qt,0)), 1, &(gqr_rule_weight(qt,0)), 1, */
+    /* 		   gqr_rule_length(qt), */
+    /* 		   &(gqr_rule_abscissa(qr,0)), 1, &(gqr_rule_weight(qr,0)), 1, */
+    /* 		   gqr_rule_length(qr), */
+    /* 		   (duffy_func_t)tetrahedron_duffy_func, NULL, */
+    /* 		   &(u[tet[i]*3]), 3) ; */
+    tq_tet_quad(&(x[3*tet[rot[i+0]]]), &(x[3*tet[rot[i+1]]]),
+    		&(x[3*tet[rot[i+2]]]), &(x[3*tet[rot[i+3]]]),
+    		&(gqr_rule_abscissa(qp,0)), 1, &(gqr_rule_weight(qp,0)), 1,
+    		gqr_rule_length(qp),
+    		&(gqr_rule_abscissa(qt,0)), 1, &(gqr_rule_weight(qt,0)), 1,
+    		gqr_rule_length(qt),
+    		&(gqr_rule_abscissa(qr,0)), 1, &(gqr_rule_weight(qr,0)), 1,
+    		gqr_rule_length(qr),
+    		(tq_tetquad_func_t)tetrahedron_bs_func, fdata,
+    		&(u[tet[i]*3]), 3) ;
   }
   
-#endif
-  /* exit(0) ; */
   return ;
 }
 
@@ -389,14 +315,136 @@ gint bsi_eval_velocity(gdouble *x, gint xstr, gdouble *f, gint fstr,
   return 0 ;
 }
 
+static gint points_origin_width(gdouble *x, gint nx, gdouble *xmin,
+				gdouble *xmax, gdouble *D, gboolean init)
+{
+  gint i ;
+
+  if ( init ) {
+    xmin[0] = xmin[1] = xmin[2] =  G_MAXDOUBLE ;
+    xmax[0] = xmax[1] = xmax[2] = -G_MAXDOUBLE ;
+  }
+
+  for ( i = 0 ; i < nx ; i ++ ) {
+    xmin[0] = MIN(xmin[0], x[3*i+0]) ;
+    xmin[1] = MIN(xmin[1], x[3*i+1]) ;
+    xmin[2] = MIN(xmin[2], x[3*i+2]) ;
+    xmax[0] = MAX(xmax[0], x[3*i+0]) ;
+    xmax[1] = MAX(xmax[1], x[3*i+1]) ;
+    xmax[2] = MAX(xmax[2], x[3*i+2]) ;
+  }    
+
+  *D = xmax[0] - xmin[0] ;
+  *D = MAX(*D, xmax[1] - xmin[1]) ;
+  *D = MAX(*D, xmax[2] - xmin[2]) ;
+
+  return 0 ;
+}
+
+static gboolean point_in_tet(gdouble *x, gint tet[4], gdouble *p)
+
+{
+  gint i0, i1, i2, i3, i, s ;
+  gdouble min, max ;
+
+  i0 = tet[0] ; i1 = tet[1] ; i2 = tet[2] ; i3 = tet[3] ; 
+
+  /*bounding box test here to eliminate most predicate calls*/
+  for ( i = 0 ; i < 3 ; i ++ ) {
+    min = MIN(x[3*i0+i], MIN(x[3*i1+i], MIN(x[3*i2+i], x[3*i3+i]))) ;
+    max = MAX(x[3*i0+i], MAX(x[3*i1+i], MAX(x[3*i2+i], x[3*i3+i]))) ;
+    if ( p[i] < min ) return FALSE ;
+    if ( p[i] > max ) return FALSE ;
+  }
+  
+  /*add a circumsphere test here to speed things up a bit?*/
+  if ( (s = SIGN(orient3d(&(x[3*i0]), &(x[3*i1]), &(x[3*i2]), p))) == 0 )
+    return TRUE ;  
+  if ( s != SIGN(orient3d(&(x[3*i0]), &(x[3*i1]), &(x[3*i2]), &(x[3*i3]))) )
+    return FALSE ;
+
+  if ( (s = SIGN(orient3d(&(x[3*i1]), &(x[3*i2]), &(x[3*i3]), p))) == 0 )
+    return TRUE ;  
+  if ( s != SIGN(orient3d(&(x[3*i1]), &(x[3*i2]), &(x[3*i3]), &(x[3*i0]))) )
+    return FALSE ;
+
+  if ( (s = SIGN(orient3d(&(x[3*i2]), &(x[3*i3]), &(x[3*i0]), p))) == 0 )
+    return TRUE ;  
+  if ( s != SIGN(orient3d(&(x[3*i2]), &(x[3*i3]), &(x[3*i0]), &(x[3*i1]))) )
+    return FALSE ;
+
+  if ( (s = SIGN(orient3d(&(x[3*i3]), &(x[3*i0]), &(x[3*i1]), p))) == 0 )
+    return TRUE ;  
+  if ( s != SIGN(orient3d(&(x[3*i3]), &(x[3*i0]), &(x[3*i1]), &(x[3*i2]))) )
+    return FALSE ;
+  
+  return TRUE ;
+}
+
+static gint tet_barycentric(gdouble *x1, gdouble *x2, gdouble *x3, gdouble *x4,
+			    gdouble *p, gdouble *L)
+
+{
+  gdouble A[9], Ai[9], r[3] ;
+
+  A[0] = x1[0] - x4[0] ; 
+  A[1] = x2[0] - x4[0] ; 
+  A[2] = x3[0] - x4[0] ; 
+  A[3] = x1[1] - x4[1] ;  
+  A[4] = x2[1] - x4[1] ;  
+  A[5] = x3[1] - x4[1] ;  
+  A[6] = x1[2] - x4[2] ;  
+  A[7] = x2[2] - x4[2] ;  
+  A[8] = x3[2] - x4[2] ;  
+
+  invert3x3(Ai, A) ;
+  r[0] = p[0] - x4[0] ;
+  r[1] = p[1] - x4[1] ;
+  r[2] = p[2] - x4[2] ;
+
+  L[0] = Ai[0]*r[0] + Ai[1]*r[1] + Ai[2]*r[2] ;
+  L[1] = Ai[3]*r[0] + Ai[4]*r[1] + Ai[5]*r[2] ;
+  L[2] = Ai[6]*r[0] + Ai[7]*r[1] + Ai[8]*r[2] ;
+
+  L[3] = 1.0 - L[0] - L[1] - L[2] ;
+  
+  return 0 ;
+}
+
+static gint mesh_interp_linear(gdouble *x, gint *tet, gint ntet, gdouble *f,
+			       gint nf, gint fstr, gdouble *xi, gdouble *fi)
+
+{
+  gint i, j ;
+  gdouble L[4] ;
+  
+  memset(fi, 0, nf*sizeof(gdouble)) ;
+  for ( i = 0 ; i < ntet ; i ++ ) {
+    if ( point_in_tet(x, &(tet[4*i]), xi) ) break ;
+  }
+  if ( i == ntet ) return 0 ;
+
+  tet_barycentric(&(x[3*tet[4*i+0]]), &(x[3*tet[4*i+1]]),
+		  &(x[3*tet[4*i+2]]), &(x[3*tet[4*i+3]]),
+		  xi, L) ;
+
+  for ( j = 0 ; j < nf ; j ++ ) {
+    fi[j] =
+      L[0]*f[fstr*tet[4*i+0]+j] + 
+      L[1]*f[fstr*tet[4*i+1]+j] + 
+      L[2]*f[fstr*tet[4*i+2]+j] + 
+      L[3]*f[fstr*tet[4*i+3]+j] ;
+  }
+  
+  return 0 ;
+}
+
 gint main(gint argc, gchar **argv)
 
 {
   FILE *input, *output ;
-  GtvVolume *v ;
-  GtsVertex *x ;
-  GtsPoint *xi ;
   gdouble *f, *q, *xq, *u, xg[3], ui[3] ;
+  gdouble *x ;
   gint nx, nf, order, nq, ntet, ntf, str, i, j, ngx, ngz ;
   gint nnmax, iorder ;
   gint ngp, ngt, ngr ;
@@ -410,10 +458,14 @@ gint main(gint argc, gchar **argv)
   gpointer data[BSI_DATA_SIZE] ;
   gqr_rule_t *qp, *qt, *qr ;
   wbfmm_tree_t *tree ;
+  wbfmm_target_list_t *targets ;
   wbfmm_shift_operators_t *shifts ;
   gdouble xtree[3], xtmax[3], D, del, *fmmwork ;
   gint pstr, torder[32], order_r, order_s, order_max, depth ;
   gint sizew, level, nthreads ;
+  tetwrap_tetgenio_t *in, *out ;
+  gchar *outfile = "velocity.dat" ;
+  gboolean sort_sources ;
   
   progname = g_strdup(g_path_get_basename(argv[0])) ;
   timer = g_timer_new() ;
@@ -423,36 +475,45 @@ gint main(gint argc, gchar **argv)
   input = stdin ;
   output = stdout ;
 
+  sort_sources = TRUE ;
   /*interpolation parameters*/
-  nnmax = 10 ; iorder = 3 ;
+  nnmax = 10 ; iorder = 2 ;
   /* mop_logging_init(stderr, "", G_LOG_LEVEL_DEBUG, NULL) ;   */
-  
+
+  /*global quadrature*/
+  order = 2 ;
+
   /*local quadratures*/
   /* ngp = 16 ; ngt = 16 ; ngr = 16 ; */
   /* ngp = 12 ; ngt = 12 ; ngr = 12 ; */
+  /* ngp = 8 ; ngt = 8 ; ngr = 8 ; */
   ngp = 4 ; ngt = 4 ; ngr = 4 ;
+  /* ngp = 1 ; ngt = 2 ; ngr = 2 ; */
   
   /*tree parameters*/
   del = 1e-2 ;
-  order_r = 8 ; order_s = 8 ;
+  order_r = 4 ; order_s = 4 ;
   depth = 6 ;
   tree = NULL ;
   
   fprintf(stderr, "%s: reading nodes; %lg\n",
 	  progname, g_timer_elapsed(timer, NULL)) ;
+  /* read_nodes(input, &x, &f, &nx, &nf) ; */
   read_nodes(input, &x, &f, &nx, &nf) ;
 
   fprintf(stderr, "%s: tetrahedralizing %d nodes; %lg\n",
 	  progname, nx, g_timer_elapsed(timer, NULL)) ;
-  v = bsi_make_delaunay_volume(x, nx) ;
-
-  order = 4 ;
+  /* v = bsi_make_delaunay_volume(x, nx) ; */
+  in = tetwrap_new(x, nx) ;
+  out = tetwrap_new(NULL, 0) ;
+  tetwrap_tetrahedralize("", in, out, NULL, NULL) ;
+  
   bsi_quadrature_js_select(order, &q, &nq) ;
   fprintf(stderr, "%s: %dth order quadrature, %d nodes; %lg\n",
 	  progname, order, nq, g_timer_elapsed(timer, NULL)) ;
 
-  ntet = gtv_volume_cell_number(v) ;
-
+  ntet = out->numberoftetrahedra ;
+  
   xq = (gdouble *)g_malloc0(ntet*(3+nf)*nq*sizeof(gdouble)) ;
   u  = (gdouble *)g_malloc0(3*nx*sizeof(gdouble)) ;
 
@@ -468,11 +529,13 @@ gint main(gint argc, gchar **argv)
   ntf = ntet*nq ;
 
   /*initialize the FMM tree*/
+  
 #if 1
   fprintf(stderr, "%s: building FMM tree; %lg\n",
 	  progname, g_timer_elapsed(timer, NULL)) ;
   wbfmm_points_origin_width(xq, str, ntf, xtree, xtmax, &D, TRUE) ;
-  bsi_points_origin_width(x, nx, xtree, xtmax, &D, FALSE) ;
+  /* bsi_points_origin_width(x, nx, xtree, xtmax, &D, FALSE) ; */
+  points_origin_width(x, nx, xtree, xtmax, &D, FALSE) ;
   xtree[0] -= del ; xtree[1] -= del ; xtree[2] -= del ;
   D += 2.0*del ;
 
@@ -482,11 +545,12 @@ gint main(gint argc, gchar **argv)
   torder[2*depth+1] = order_r ; 
   order_max = MAX(order_s, order_r) ;
   for ( i = depth-1 ; i > 0 ; i -- ) {
-    torder[2*i+0] = torder[2*(i+1)+0] + 4 ;
-    torder[2*i+1] = torder[2*(i+1)+1] + 4 ;
+    torder[2*i+0] = torder[2*(i+1)+0] + 2 ;
+    torder[2*i+1] = torder[2*(i+1)+1] + 2 ;
     order_max = MAX(order_max, torder[2*i+0]) ;
     order_max = MAX(order_max, torder[2*i+1]) ;
   }
+  
 #endif
   
   sizew = wbfmm_element_number_rotation(2*order_max) ;
@@ -525,13 +589,13 @@ gint main(gint argc, gchar **argv)
   data[BSI_DATA_QUADRATURE_PHI] = qp ;
   data[BSI_DATA_QUADRATURE_TH]  = qt ; 
   data[BSI_DATA_QUADRATURE_R]   = qr ;
-  
-  gtv_volume_foreach_cell(v, (GtsFunc)quadrature_nodes, data) ;
 
-  /* return 0 ; */
+  fprintf(stderr, "%s: generating quadrature nodes; %lg\n",
+	  progname, g_timer_elapsed(timer, NULL)) ;
+  for ( i = 0 ; i < ntet ; i ++ ) {
+    quadrature_nodes_tetgen(&(out->tetrahedronlist[4*i]), data) ;
+  }
   
-  /* g_assert(ntf == ntet*nq) ; */
-
   fprintf(stderr, "ntf == %d (%d)\n", ntf, ntet*nq) ;
   
 #if 1
@@ -550,7 +614,9 @@ gint main(gint argc, gchar **argv)
 
   /*add source points to the tree and refine to allocate sources to
     leaf boxes*/
-  wbfmm_tree_add_points(tree, (gpointer)xq, pstr, NULL, 0, ntf) ;
+  if ( sort_sources )
+    wbfmm_tree_sort_points(tree, xq, pstr, ntf) ;
+  wbfmm_tree_add_points(tree, (gpointer)xq, pstr, NULL, 0, ntf, sort_sources) ;
   for ( i = 0 ; i < depth ; i ++ ) wbfmm_tree_refine(tree) ;
 
   wbfmm_tree_problem(tree) = WBFMM_PROBLEM_LAPLACE ;
@@ -559,6 +625,10 @@ gint main(gint argc, gchar **argv)
     wbfmm_tree_laplace_coefficient_init(tree, i,
 					torder[2*i+1], torder[2*i+0]) ;
   }
+  fprintf(stderr, "%s: building target list; %lg\n",
+	  progname, g_timer_elapsed(timer, NULL)) ;
+  targets = wbfmm_target_list_new(tree, nx) ;
+  wbfmm_target_list_add_points(targets, x, 3*sizeof(gdouble), nx) ;
 
   fprintf(stderr, "%s: initializing leaf expansions; %lg\n",
 	  progname, g_timer_elapsed(timer, NULL)) ;  
@@ -590,7 +660,7 @@ gint main(gint argc, gchar **argv)
 	    progname, g_timer_elapsed(timer, NULL)) ;
     for ( i = 0 ; i < nx ; i ++ ) {
       bsi_eval_velocity(xq, str, &(xq[3]), str, ntf,
-			&(GTS_POINT(&(x[i]))->x), &(u[3*i])) ;    
+			&(x[3*i]), &(u[3*i])) ;
     }
     fprintf(stderr, "%s: point source summation completed; %lg\n",
 	    progname, g_timer_elapsed(timer, NULL)) ;
@@ -600,9 +670,10 @@ gint main(gint argc, gchar **argv)
 
     for ( i = 0 ; i < nx ; i ++ ) {
       guint64 box ;
-      box = wbfmm_point_box(tree, tree->depth, &(GTS_POINT(&(x[i]))->x)) ;
+      /* box = wbfmm_point_box(tree, tree->depth, &(x[3*i])) ; */
+      box = wbfmm_target_point_box(targets,i) ;
       wbfmm_tree_laplace_box_local_curl(tree, tree->depth, box,
-					&(GTS_POINT(&(x[i]))->x),
+					&(x[3*i]),
 					&(u[3*i]), 3,
 					&(xq[3]), str,
 					NULL, 0, NULL, 0,
@@ -612,15 +683,14 @@ gint main(gint argc, gchar **argv)
     fprintf(stderr, "%s: FMM point source summation completed; %lg\n",
 	    progname, g_timer_elapsed(timer, NULL)) ;
   }
-
-  /* fprintf(stderr, "%lg %lg %lg %1.16e %1.16e %1.16e\n", */
-  /* 	  GTS_POINT(&(x[0]))->x, GTS_POINT(&(x[0]))->y, GTS_POINT(&(x[0]))->z, */
-  /* 	  u[0], u[1], u[2]) ; */
-
-  /* return 0 ; */
   
   ngx = 0 ; ngz = 1025 ;
-  xi = gts_point_new(gts_point_class(), 0, 0, 0) ;
+
+  if ( outfile != NULL )
+    output = fopen(outfile, "w") ;
+  else
+    output = stdout ;
+  
   for ( i = 0 ; i <= ngx ; i ++ ) {
     xg[0] = 1.0 ; /* -2 + (4.0)*i/ngx ; */
     xg[1] = 0.0 ;
@@ -628,15 +698,16 @@ gint main(gint argc, gchar **argv)
       xg[2] = -1 + (2.0)*j/ngz ;
       ui[0] = ui[1] = ui[2] = 0.0 ;
 
-      xi->x = xg[0] ; xi->y = xg[1] ; xi->z = xg[2] ; 
-      bsi_mesh_interp_linear(x, v, u, 3, 3, xi, ui) ;
-    
+      mesh_interp_linear(x, out->tetrahedronlist, ntet, u, 3, 3, xg, ui) ;
+      
       fprintf(output,
   	      "%e %e %e %e %e %e\n",
   	      xg[0], xg[1], xg[2],
   	      ui[0], ui[1], ui[2]) ;
     }
   }
-
+  
+  if ( output != stdout ) fclose(output) ;
+  
   return 0 ;
 }

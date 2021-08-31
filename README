@@ -1,0 +1,36 @@
+BSI is a library for the evaluation of the Biot-Savart Integral on
+scattered data sets.
+
+BSI is released under the GNU General Public Licence v3. It includes
+the tetgen tetrahedralization code of Hang Si:
+
+http://www.tetgen.org/
+
+which is released under the GNU Affero General Public Licence.
+
+INSTALLATION
+
+BSI makes use of a number of other libraries which need to be
+installed before compiling BSI. They are all available from github:
+
+https://github.com/mjcarley/gqr
+https://github.com/mjcarley/mop
+https://github.com/mjcarley/wbfmm
+https://github.com/mjcarley/blaswrap
+
+Once the required libraries are installed, the installation process is
+the usual sequence:
+
+./configure [options]
+make
+make install
+
+./configure --help 
+
+lists the options available.
+
+It is recommended to use the highest level of compiler optimization available:
+
+CFLAGS="-O3 -g" ./configure ...
+
+as it does make a very noticeable difference to performance.

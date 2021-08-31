@@ -13,9 +13,16 @@ libbsi_la_SOURCES = \
 	rbf.c \
 	rbf.h \
 	interpolate.c \
-	integrate.c \
 	tetquad.c \
-	tetquad.h
+	tetquad.h \
+	tetwrap.c++ \
+	tetwrap.h \
+	bsi-private.h \
+	tetgen.h \
+	tetgen.cxx \
+	predicates.cxx \
+	duffy-tet.c \
+	duffy.h
 
 include_HEADERS = \
 	bsi.h

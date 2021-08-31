@@ -22,11 +22,36 @@
 
 #include <glib.h>
 
+#include <blaswrap.h>
+
 #include "tetquad.h"
 
-#define EPSILON 1e-15
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif /*HAVE_CONFIG_H*/
 
-gint index_sort3(gdouble *x, gint *idx)
+#ifdef HAVE_AVX_INSTRUCTIONS
+#include <immintrin.h>
+#endif /*HAVE_AVX_INSTRUCTIONS*/
+
+/*tolerance for in-plane check in ray-tracing calculation*/
+#define EPSILON 1e-15
+/*tolerance for zeroing entries in transformed coordinates*/
+#define TOL_ZERO 1e-12
+/*
+ * tolerance for integrals in theta: do not integrate over intervals
+ * smaller than this (treat interval as so small the integral is zero)
+ */
+#define TOL_THETA 1e-6
+
+/* #define TRANSFORM_PHI */
+
+#ifndef _GNU_SOURCE
+#define sincos(_x,_S,_C)					\
+  do { (*(_S)) = sin((_x)) ; (*(_C)) = cos((_x)) ; } while (0)
+#endif
+
+static gint index_sort3(gdouble *x, gint *idx)
 
 {
   idx[0] = idx[1] = idx[2] = -1 ; 
@@ -66,8 +91,8 @@ gint index_sort3(gdouble *x, gint *idx)
   return 0 ;
 }
 
-gint multiply_matrices3x3(gdouble *A, gdouble *B, gdouble *C,
-			  gboolean tc)
+static inline void multiply_matrices3x3(gdouble *A, gdouble *B, gdouble *C,
+					gboolean tc)
 
 /*A = B*C or A = B*C'*/
   
@@ -85,7 +110,7 @@ gint multiply_matrices3x3(gdouble *A, gdouble *B, gdouble *C,
     A[7] = B[3*2+0]*C[3*0+1] + B[3*2+1]*C[3*1+1] + B[3*2+2]*C[3*2+1] ; 
     A[8] = B[3*2+0]*C[3*0+2] + B[3*2+1]*C[3*1+2] + B[3*2+2]*C[3*2+2] ;
 
-    return 0 ;
+    return ;
   }
 
   /*multiplication with C transposed*/
@@ -101,11 +126,11 @@ gint multiply_matrices3x3(gdouble *A, gdouble *B, gdouble *C,
   A[7] = B[3*2+0]*C[3*1+0] + B[3*2+1]*C[3*1+1] + B[3*2+2]*C[3*1+2] ; 
   A[8] = B[3*2+0]*C[3*2+0] + B[3*2+1]*C[3*2+1] + B[3*2+2]*C[3*2+2] ;
 
-  return 0 ;
+  return ;
 }
 
-gint multiply_matrix_vector3(gdouble *y, gdouble *A, gdouble *x,
-				    gboolean tr)
+static inline void multiply_matrix_vector3(gdouble *y, gdouble *A, gdouble *x,
+					   gboolean tr)
 
 {
   if ( !tr ) {
@@ -113,62 +138,78 @@ gint multiply_matrix_vector3(gdouble *y, gdouble *A, gdouble *x,
     y[1] = A[3]*x[0] + A[4]*x[1] + A[5]*x[2] ; 
     y[2] = A[6]*x[0] + A[7]*x[1] + A[8]*x[2] ;
 
-    return 0 ;
+    return ;
   }
 
   y[0] = A[0]*x[0] + A[3]*x[1] + A[6]*x[2] ; 
   y[1] = A[1]*x[0] + A[4]*x[1] + A[7]*x[2] ; 
   y[2] = A[2]*x[0] + A[5]*x[1] + A[8]*x[2] ;
 
-  return 0 ;
+  return ;
 }
 
-gint rotation_x(gdouble th, gdouble *A)
+static inline void multiply_matrix4_vector3(gdouble *y, gdouble *A, gdouble *x)
+
 
 {
-  gdouble R[9], At[9] ;
+  y[0] = A[0]*x[0] + A[1]*x[1] + A[2]*x[2] ; 
+  y[1] = A[3]*x[0] + A[4]*x[1] + A[5]*x[2] ; 
+  y[2] = A[6]*x[0] + A[7]*x[1] + A[8]*x[2] ;
+  y[3] = A[9]*x[0] + A[10]*x[1] + A[11]*x[2] ;
+  
+  return ;
+}
+
+static void rotation_x(gdouble th, gdouble *A)
+
+{
+  gdouble R[9], At[9], C, S ;
 
   memcpy(At, A, 9*sizeof(gdouble)) ;
-  
+
+  sincos(th, &S, &C) ;
   R[0] = 1.0 ; R[1] = 0.0 ; R[2] = 0.0 ;
-  R[3] = 0.0 ; R[4] = cos(th) ; R[5] = -sin(th) ;
-  R[6] = 0.0 ; R[7] = sin(th) ; R[8] =  cos(th) ;
+  R[3] = 0.0 ; R[4] = C ; R[5] = -S ;
+  R[6] = 0.0 ; R[7] = S ; R[8] =  C ;
 
   multiply_matrices3x3(A, R, At, FALSE) ;
   
-  return 0 ;
+  return ;
 }
 
-gint rotation_y(gdouble th, gdouble *A)
+static void rotation_y(gdouble th, gdouble *A)
 
 {
-  gdouble R[9], At[9] ;
+  gdouble R[9], At[9], S, C ;
 
   memcpy(At, A, 9*sizeof(gdouble)) ;
 
-  R[0] =  cos(th) ; R[1] = 0.0 ; R[2] = sin(th) ;
-  R[3] =      0.0 ; R[4] = 1.0 ; R[5] =     0.0 ;
-  R[6] = -sin(th) ; R[7] = 0.0 ; R[8] = cos(th) ;
+  sincos(th, &S, &C) ;
+
+  R[0] =  C   ; R[1] = 0.0 ; R[2] = S   ;
+  R[3] =  0.0 ; R[4] = 1.0 ; R[5] = 0.0 ;
+  R[6] = -S   ; R[7] = 0.0 ; R[8] = C   ;
   
   multiply_matrices3x3(A, R, At, FALSE) ;
 
-  return 0 ;
+  return ;
 }
 
-gint rotation_z(gdouble th, gdouble *A)
+static void rotation_z(gdouble th, gdouble *A)
 
 {
-  gdouble R[9], At[9] ;
+  gdouble R[9], At[9], S, C ;
 
   memcpy(At, A, 9*sizeof(gdouble)) ;
+  sincos(th, &S, &C) ;
 
-  R[0] =  cos(th) ; R[1] = -sin(th) ; R[2] = 0.0 ;
-  R[3] =  sin(th) ; R[4] =  cos(th) ; R[5] = 0.0 ;
-  R[6] = 0.0 ; R[7] = 0.0 ; R[8] = 1.0 ;
+  R[0] = C   ; R[1] = -S   ; R[2] = 0.0 ;
+  R[3] = S   ; R[4] =  C   ; R[5] = 0.0 ;
+  R[6] = 0.0 ; R[7] =  0.0 ; R[8] = 1.0 ;
   
   multiply_matrices3x3(A, R, At, FALSE) ;
 
-  return 0 ;
+  return ;
 }
 
 /* gdouble turning_point(gdouble *x1, gdouble *x2) */
@@ -192,24 +233,26 @@ gint rotation_z(gdouble th, gdouble *A)
 /*   return u ; */
 /* } */
 
-static gboolean intersect_triangle(gdouble orig[3], gdouble dir[3],
-				   gdouble vert0[3], gdouble vert1[3], 
-				   gdouble vert2[3], gdouble *t)
-				   /* gdouble *u, gdouble *v) */
+#ifndef HAVE_AVX_INSTRUCTIONS
+static gboolean intersect_triangle(gdouble dir[3], gdouble vert0[3],
+				   gdouble edge1[3], gdouble edge2[3],
+				   gdouble qvec[3],
+				   gdouble *t)
+
 /*
  * Taken from Moller and Trumbore, Journal of Graphics Tools, 1997,
  * 2(1):21--28, http://jgt.akpeters.com/papers/MollerTrumbore97/
+ *
+ * adapted to return only distance to plane and to take precomputed
+ * edge vectors
  */
 
 {
-  gdouble edge1[3], edge2[3], tvec[3], pvec[3], qvec[3]; 
-  gdouble det, inv_det;
+  gdouble *tvec, pvec[3], det, inv_det ;
+#ifdef RAY_TRACE_CHECK_BOUNDS
   gdouble u, v ;
+#endif /*RAY_TRACE_CHECK_BOUNDS*/
   
-  /* find vectors for two edges sharing vert0 */ 
-  tq_vector_init(edge1, vert1, vert0);
-  tq_vector_init(edge2, vert2, vert0);
-
   /* begin calculating determinant - also used to calculate U parameter */ 
   tq_vector_cross(pvec, dir, edge2);
   
@@ -221,91 +264,103 @@ static gboolean intersect_triangle(gdouble orig[3], gdouble dir[3],
 
   inv_det = 1.0 / det ;
   /* calculate distance from vert0 to ray origin */ 
-  tq_vector_init(tvec, orig, vert0) ;
+  /* tq_vector_init(tvec, orig, vert0) ; */
+  tvec = vert0 ;
 
+#ifdef RAY_TRACE_CHECK_BOUNDS  
   /* calculate U parameter and test bounds */ 
-  /* *u = tq_vector_scalar(tvec, pvec) * inv_det;  */
-  /* if (*u < 0.0 || *u > 1.0) return FALSE ; */
-  u = tq_vector_scalar(tvec, pvec) * inv_det; 
-  if (u < 0.0 || u > 1.0) return FALSE ;
-
+  /* u = tq_vector_scalar(tvec, pvec) * inv_det;  */
+  /* if (u < 0.0 || u > 1.0) return FALSE ; */
+#endif /*RAY_TRACE_CHECK_BOUNDS  */
+  
   /* prepare to test V parameter */ 
   tq_vector_cross(qvec, tvec, edge1);
 
+#ifdef RAY_TRACE_CHECK_BOUNDS    
   /* calculate V parameter and test bounds */ 
-  /* *v = tq_vector_scalar(dir, qvec) * inv_det;  */
-  /* if (*v < 0.0 || *u + *v > 1.0) return FALSE  ; */
-  v = tq_vector_scalar(dir, qvec) * inv_det; 
+  v = tq_vector_scalar(dir, qvec) * inv_det;
   if (v < 0.0 || u + v > 1.0) return FALSE  ;
-
+#endif /*RAY_TRACE_CHECK_BOUNDS*/
+  
   /* calculate t, ray intersects triangle */ 
   *t = tq_vector_scalar(edge2, qvec) * inv_det; 
 
   return TRUE ;
 }
 
-gdouble segment_intersect_2d(gdouble *x1, gdouble *x2, gdouble C, gdouble S)
+static gdouble segment_intersect_2d(gdouble *x1, gdouble *d,
+				    gdouble C, gdouble S)
 
+/*
+ * calculate intersection point in two dimensions of ray through
+ * origin with direction (C,S) and line segment x1--(x1+d)
+ */
+  
 {
-  gdouble d[2], u ;
+  gdouble u ;
 
-  d[0] = x2[0] - x1[0] ; d[1] = x2[1] - x1[1] ;
-
-  u = (x1[0]*S - x1[1]*C)/(d[1]*C - d[0]*S) ;
+  u = -(x1[0]*S - x1[1]*C)/(d[0]*S - d[1]*C) ;
   
   return u ;
 }
 
-gint segment_interp(gdouble *x1, gdouble *x2, gdouble u, gdouble *x)
+static void segment_interp(gdouble *x1, gdouble *d, gdouble u, gdouble *x)
 
-{
-  x[0] = x1[0] + u*(x2[0] - x1[0]) ;
-  x[1] = x1[1] + u*(x2[1] - x1[1]) ;
-  x[2] = x1[2] + u*(x2[2] - x1[2]) ;
+/*
+ * interpolate on line segment x1--(x1+d), 0 <= u <= 1
+ */
   
-  return 0 ;
+{
+  x[0] = x1[0] + u*d[0] ;
+  x[1] = x1[1] + u*d[1] ;
+  x[2] = x1[2] + u*d[2] ;
+  
+  return ;
 }
 
-gint in_plane_points(gdouble *x, gint *idx)
+#endif /*HAVE_AVX_INSTRUCTIONS*/
 
-{
-  gint n, j ;
+
+/* static void in_plane_points(gdouble *x, gint *idx) */
+
+/* { */
+/*   gint n, j ; */
   
-  /*find ordering of points, with in-plane points first*/
-  n = 0 ; j = -1 ;
+/*   /\*find ordering of points, with in-plane points first*\/ */
+/*   n = 0 ; j = -1 ; */
 
-  if ( x[3*0+2] < 1e-12 ) {
-    idx[n] = 0 ; n ++ ;
-  } else {
-    j = 0 ;
-  }
+/*   if ( x[3*0+2] < TOL_ZERO ) { */
+/*     idx[n] = 0 ; n ++ ; */
+/*   } else { */
+/*     j = 0 ; */
+/*   } */
   
-  if ( x[3*1+2] < 1e-12 ) {
-    idx[n] = 1 ; n ++ ;
-  } else {
-    j = 1 ;
-  }
+/*   if ( x[3*1+2] < TOL_ZERO ) { */
+/*     idx[n] = 1 ; n ++ ; */
+/*   } else { */
+/*     j = 1 ; */
+/*   } */
 
-  if ( x[3*2+2] < 1e-12 ) {
-    idx[n] = 2 ; n ++ ;
-  } else {
-    j = 2 ;
-  }
+/*   if ( x[3*2+2] < TOL_ZERO ) { */
+/*     idx[n] = 2 ; n ++ ; */
+/*   } else { */
+/*     j = 2 ; */
+/*   } */
 
-  idx[2] = j ;
+/*   idx[2] = j ; */
   
-  g_assert(n == 2) ;
-  g_assert(j != -1) ;
+/*   g_assert(n == 2) ; */
+/*   g_assert(j != -1) ; */
 
-  if ( x[3*idx[0]+1] < 1e-12 ) return 0 ;
+/*   if ( x[3*idx[0]+1] < TOL_ZERO ) return 0 ; */
 
-  /*swap first two rows*/
-  n = idx[0] ; idx[0] = idx[1] ; idx[1] = n ;
+/*   /\*swap first two rows*\/ */
+/*   n = idx[0] ; idx[0] = idx[1] ; idx[1] = n ; */
   
-  return 0 ;
-}
+/*   return ; */
+/* } */
 
-gint order_points(gdouble *x, gint *idx)
+static void order_points(gdouble *x, gint *idx)
 
 {
   gint j ;
@@ -316,21 +371,23 @@ gint order_points(gdouble *x, gint *idx)
   }
 
   index_sort3(th, idx) ;
-
-  /* j = idx[1] ; idx[1] = idx[2] ; idx[2] = j ; */
   
-  return 0 ;
+  return ;
 }
 
+#ifndef HAVE_AVX_INSTRUCTIONS
 static gint subtet_quad_th(gdouble *x, gdouble *xs,
 			   gdouble th0, gdouble th1,
 			   gint i0, gint i1,
 			   gint j0, gint j1,
-			   gdouble *qph, gint qpstr, gdouble *wph, gint wpstr,
+			   gdouble *qph, gint qpstr,
+			   gdouble *wph, gint wpstr,
 			   gint nph,
-			   gdouble *qth, gint qtstr, gdouble *wth, gint wtstr,
+			   gdouble *qth, gint qtstr,
+			   gdouble *wth, gint wtstr,
 			   gint nth,
-			   gdouble *qr, gint qrstr, gdouble *wr, gint wrstr,
+			   gdouble *qr, gint qrstr,
+			   gdouble *wr, gint wrstr,
 			   gint nr,
 			   tq_tetquad_func_t qfunc, gpointer qdata,
 			   gdouble *q, gint nq, gdouble *A)
@@ -341,43 +398,49 @@ static gint subtet_quad_th(gdouble *x, gdouble *xs,
   gdouble ph0, ph1, phb, dph, ph, Cph, Sph ;
   gdouble r2, r, dr, rb ;
   gdouble s[3], orig[3] = {0,0,0}, wt, yg[3], sg[3] ;
+  gdouble dxi[3], dxj[3] ;
+  /* gdouble tp0, tp1, dtp, tpb ; */
+  gdouble edge1[3], edge2[3], qvec[3] ;
   
   thb = 0.5*(th1 + th0) ; dth = 0.5*(th1 - th0) ;
   dth = fabs(dth) ;
-
-  /* fprintf(stderr, "dth: %lg\n", dth) ; */
+  /* fprintf(stderr, "dth = %lg\n", dth) ; */
   
-  if  ( dth < 1e-6 ) return 0 ;
+  if  ( dth < TOL_THETA ) return 0 ;
+
+  /*intermediate quantities for geometric calculations*/
+  tq_vector_init(dxi, &(x[3*i0]), &(x[3*i1])) ;
+  tq_vector_init(dxj, &(x[3*j0]), &(x[3*j1])) ;
+  tq_vector_init(edge1, &(x[3*1]), &(x[3*0])) ;
+  tq_vector_init(edge2, &(x[3*2]), &(x[3*0])) ;
+  tq_vector_cross(qvec, &(x[3*0]), edge1) ;
   
   for ( i = 0 ; i < nth ; i ++ ) {
     th = thb + dth*qth[i*qtstr] ;
-    Cth = cos(th) ; Sth = sin(th) ;
-    u = segment_intersect_2d(&(x[3*i0]), &(x[3*i1]), Cth, Sth) ;
-    if ( !BETWEEN(u,0.0,1.0) ) return -1 ;
-      /* g_error("%s: u out of bounds: %lg (%lg)", __FUNCTION__, u, u-1.0) ; */
-    segment_interp(&(x[3*i0]), &(x[3*i1]), u, xi) ;
+    Cth = cos(th) ; Sth = sqrt(1.0 - Cth*Cth) ;
+    u = segment_intersect_2d(&(x[3*i0]), dxi, Cth, Sth) ;
+    segment_interp(&(x[3*i0]), dxi, u, xi) ;
     ph0 = acos(xi[2]/sqrt(tq_vector_scalar(xi,xi))) ;
+    /* tp0 = xi[2]/sqrt(tq_vector_scalar(xi,xi)) ; */
 
-    u = segment_intersect_2d(&(x[3*j0]), &(x[3*j1]), Cth, Sth) ;
-    /* g_assert(u >= 0 && u <= 1) ; */
-    if ( !BETWEEN(u,0.0,1.0) ) return -1 ;
-      /* g_error("%s: u out of bounds: %lg (%lg)", __FUNCTION__, u, u-1.0) ; */
-    segment_interp(&(x[3*j0]), &(x[3*j1]), u, xi) ;
+    u = segment_intersect_2d(&(x[3*j0]), dxj, Cth, Sth) ;
+    segment_interp(&(x[3*j0]), dxj, u, xi) ;
     ph1 = acos(xi[2]/sqrt(tq_vector_scalar(xi,xi))) ;
+    /* tp1 = xi[2]/sqrt(tq_vector_scalar(xi,xi)) ; */
+
     phb = 0.5*(ph1 + ph0) ; dph = 0.5*(ph1 - ph0) ;
     dph = fabs(dph) ;
-
+    /* tpb = 0.5*(tp1 + tp0) ; dtp = 0.5*(tp1 - tp0) ; */
+    /* dtp = fabs(dtp) ; */
+    
     for ( j = 0 ; j < nph ; j ++ ) {
       ph = phb + dph*qph[j*qpstr] ;
-      Cph = cos(ph) ; Sph = sin(ph) ; 
+      Cph = cos(ph) ; Sph = sqrt(1.0 - Cph*Cph) ;
       s[0] = Sph*Cth ;
       s[1] = Sph*Sth ;
       s[2] = Cph ;
-      if ( !intersect_triangle(orig, s,
-			       &(x[3*0]), &(x[3*1]), &(x[3*2]),
-			       &r2) ) {
+      if ( !intersect_triangle(s, &(x[3*0]), edge1, edge2, qvec, &r2) ) {
 	return 3 ;
-	/* g_error("%s: intersection failed", __FUNCTION__) ; */
       }
       r2 = fabs(r2) ;
       rb = 0.5*r2 ; dr = 0.5*r2 ;
@@ -389,25 +452,280 @@ static gint subtet_quad_th(gdouble *x, gdouble *xs,
 	yg[1] = r*sg[1] + xs[1] ; 
 	yg[2] = r*sg[2] + xs[2] ; 
 	wt = r*r*Sph*wth[i*wtstr]*wph[j*wpstr]*wr[k*wrstr]*dph*dth*dr ;
+	/* wt = r*r*wth[i*wtstr]*wph[j*wpstr]*wr[k*wrstr]*dtp*dth*dr ; */
 	qfunc(yg, sg, r, wt, q, nq, qdata) ;
       }
     }    
   }
+
+  return 0 ;
+}
+#else /*HAVE_AVX_INSTRUCTIONS*/
+
+static inline gboolean triangle_det4(gdouble dir[12],
+				     __m256d rdvx, __m256d rdvy, __m256d rdvz, 
+				     __m256d re2q,
+				     gdouble *t)
+
+{
+  __m256d op1, acc, rdx, rdy, rdz ;
+
+  rdx = _mm256_load_pd(&(dir[0])) ;
+  rdy = _mm256_load_pd(&(dir[4])) ;
+  rdz = _mm256_load_pd(&(dir[8])) ;
+  
+  acc = _mm256_mul_pd(rdx, rdvx) ;
+  op1 = _mm256_mul_pd(rdy, rdvy) ;
+  acc = _mm256_add_pd(acc, op1) ;
+  op1 = _mm256_mul_pd(rdz, rdvz) ;
+  acc = _mm256_add_pd(acc, op1) ;
+  acc = _mm256_div_pd(re2q, acc) ;
+  
+  _mm256_store_pd(t, acc) ;
+
+  return TRUE ;
+}
+
+static __m256d calc_cos4(gdouble thb, gdouble dth, gdouble *q)
+
+{
+  gint i ;
+  __m256d rCth ;
+  __attribute__ ((aligned (32))) gdouble Cth[4] ;
+
+  /*this can be done with AVX 512 when I get to a machine that lets
+    me*/
+  
+  for ( i = 0 ; i < 4 ; i ++ ) {
+    Cth[i] = cos(thb + dth*q[i]) ;
+  }
+
+  rCth = _mm256_load_pd(Cth) ;
+
+  return rCth ;
+}
+
+static __m256d calc_sin4(__m256d rCth)
+
+{
+  __m256d rSth, op1 ;
+  const __m256d op2 = _mm256_set1_pd(1.0) ;
+
+  op1 = _mm256_mul_pd(rCth,rCth) ;
+  op1 = _mm256_sub_pd(op2,op1) ;
+  rSth = _mm256_sqrt_pd(op1) ;
+  
+  return rSth ;
+}
+
+static void segment_intersect_2d4(gdouble *x1, gdouble *d,
+				  __m256d rCth, __m256d rSth, 
+				  gdouble u[4])
+
+/*
+ * calculate intersection point in two dimensions of ray through
+ * origin with direction (C,S) and line segment x1--(x1+d)
+ *
+ * this could probably be rewritten to return u in a __m256d
+ */
+  
+{
+  __m256d op1, op2, op3 ;
+
+  op1 = _mm256_set1_pd(x1[0]) ;
+  op1 = _mm256_mul_pd(op1, rSth) ;
+  op2 = _mm256_set1_pd(d[0]) ;
+  op2 = _mm256_mul_pd(op2, rSth) ;
+  op3 = _mm256_set1_pd(d[1]) ;
+  op3 = _mm256_mul_pd(op3, rCth) ;
+  /*denominator*/
+  op3 = _mm256_sub_pd(op3, op2) ;
+  /*numerator*/
+  op2 = _mm256_set1_pd(x1[1]) ;
+  op2 = _mm256_mul_pd(op2, rCth) ;
+  op2 = _mm256_sub_pd(op1, op2) ;
+  op2 = _mm256_div_pd(op2, op3) ;
+  _mm256_store_pd(u, op2) ;
+
+  return ;
+}
+
+static void segment_interp4(gdouble *x1, gdouble *d, gdouble u[4],
+			    gdouble tp[4])
+
+/*
+ * interpolate on line segment x1--(x1+d), 0 <= u <= 1
+ */
+  
+{
+  gint i ;
+  gdouble x[3], z[4] ;
+  __m256d op1, op2 ;
+  
+  for ( i = 0 ; i < 4 ; i ++ ) {
+    x[0] = x1[0] + u[i]*d[0] ;
+    x[1] = x1[1] + u[i]*d[1] ;
+    x[2] = x1[2] + u[i]*d[2] ;
+    z[i] = x[2]  ;
+    tp[i] = tq_vector_scalar(x,x) ;
+  }
+
+  op1 = _mm256_load_pd(tp) ;
+  op1 = _mm256_sqrt_pd(op1) ;
+  op2 = _mm256_load_pd(z) ;
+  op1 = _mm256_div_pd(op2, op1) ;
+  _mm256_store_pd(tp, op1) ;
+
+  return ;
+}
+
+static gint subtet_quad_th_avx(gdouble *x, gdouble *xs,
+			       gdouble th0, gdouble th1,
+			       gint i0, gint i1,
+			       gint j0, gint j1,
+			       gdouble *qph, gint qpstr,
+			       gdouble *wph, gint wpstr,
+			       gint nph,
+			       gdouble *qth, gint qtstr,
+			       gdouble *wth, gint wtstr,
+			       gint nth,
+			       gdouble *qr, gint qrstr,
+			       gdouble *wr, gint wrstr,
+			       gint nr,
+			       tq_tetquad_func_t qfunc, gpointer qdata,
+			       gdouble *q, gint nq, gdouble *A)
+
+{
+  gint i, j, k, m, n ;
+#ifdef TRANSFORM_PHI
+  gdouble dtp, tpb ;
+#else /*TRANSFORM_PHI*/
+  gdouble ph0[4], ph1[4], phb, dph, ph ;
+#endif /*TRANSFORM_PHI*/
+  gdouble dth, thb ;
+  gdouble Cph[4], Sph[4] ;
+  __attribute__ ((aligned (32))) gdouble r2[4], u[4], Cth[4], Sth[4], s[12] ;
+  __attribute__ ((aligned (32))) gdouble tp0[4], tp1[4] ;
+  gdouble r ;
+  gdouble wt, wj, yg[3], sg[12], dxi[3], dxj[3] ;
+  gdouble edge1[3], edge2[3], qvec[3], e2q, dv[3] ;
+  __m256d rdvx, rdvy, rdvz, re2q, rCth, rSth ;
+  gint i3 = 3, i4 = 4 ;
+  gdouble d1 = 1.0, d0 = 0.0 ;	
+  
+  g_assert(qpstr == 1) ; g_assert(wpstr == 1) ;
+  g_assert(qtstr == 1) ; g_assert(wtstr == 1) ;
+  g_assert(qrstr == 1) ; g_assert(wrstr == 1) ;
+
+  g_assert(nth % 4 == 0) ;
+  g_assert(nph % 4 == 0) ;
+  
+  thb = 0.5*(th1 + th0) ; dth = 0.5*(th1 - th0) ;
+  dth = fabs(dth) ;
+  
+  if  ( dth < TOL_THETA ) return 0 ;
+
+  /*intermediate quantities for geometric calculations*/
+  tq_vector_init(dxi, &(x[3*i0]), &(x[3*i1])) ;
+  tq_vector_init(dxj, &(x[3*j0]), &(x[3*j1])) ;
+  tq_vector_init(edge1, &(x[3*1]), &(x[3*0])) ;
+  tq_vector_init(edge2, &(x[3*2]), &(x[3*0])) ;
+  tq_vector_cross(qvec, &(x[3*0]), edge1) ;
+  e2q = tq_vector_scalar(edge2, qvec) ;  
+
+  re2q = _mm256_set1_pd(e2q) ;
+  
+  /*
+   * precompute terms used in vector triple product
+   * a.(b x c) = b.dv (with b == direction vector)
+   */
+  dv[0] = edge1[2]*edge2[1] - edge1[1]*edge2[2] ; 
+  dv[1] = edge1[0]*edge2[2] - edge1[2]*edge2[0] ; 
+  dv[2] = edge1[1]*edge2[0] - edge1[0]*edge2[1] ; 
+  rdvx = _mm256_set1_pd(dv[0]) ;
+  rdvy = _mm256_set1_pd(dv[1]) ;
+  rdvz = _mm256_set1_pd(dv[2]) ;
+  
+  for ( i = 0 ; i < nth ; i += 4 ) {
+    rCth = calc_cos4(thb, dth, &(qth[i])) ;
+    rSth = calc_sin4(rCth) ;
+    segment_intersect_2d4(&(x[3*i0]), dxi, rCth, rSth, u) ;
+    segment_interp4(&(x[3*i0]), dxi, u, tp0) ;
+#ifndef TRANSFORM_PHI
+    for ( m = 0 ; m < 4 ; m ++ ) ph0[m] = acos(tp0[m]) ;
+#endif /*TRANSFORM_PHI*/
+    
+    segment_intersect_2d4(&(x[3*j0]), dxj, rCth, rSth, u) ;
+    segment_interp4(&(x[3*j0]), dxj, u, tp1) ;
+#ifndef TRANSFORM_PHI
+    for ( m = 0 ; m < 4 ; m ++ ) ph1[m] = acos(tp1[m]) ;
+#endif /*TRANSFORM_PHI*/
+
+    _mm256_store_pd(Sth, rSth) ;
+    _mm256_store_pd(Cth, rCth) ;
+  
+    for ( n = 0 ; n < 4 ; n ++ ) {
+#ifdef TRANSFORM_PHI
+      tpb = 0.5*(tp1[n] + tp0[n]) ; dtp = 0.5*(tp1[n] - tp0[n]) ;
+      dtp = fabs(dtp) ;
+#else /*TRANSFORM_PHI*/
+    phb = 0.5*(ph1[n] + ph0[n]) ; dph = 0.5*(ph1[n] - ph0[n]) ;
+    dph = fabs(dph) ;
+#endif /*TRANSFORM_PHI*/
+
+      for ( j = 0 ; j < nph ; j += 4 ) {
+	for ( m = 0 ; m < 4 ; m ++ ) {
+#ifdef TRANSFORM_PHI
+	  Cph[m] = tpb + dtp*qph[j+m] ;
+#else /*TRANSFORM_PHI*/
+	  ph = phb + dph*qph[j+m] ; Cph[m] = cos(ph) ;
+#endif /*TRANSFORM_PHI*/
+	  Sph[m] = sqrt(1.0 - Cph[m]*Cph[m]) ;
+	  s[4*0+m] = Sph[m]*Cth[n] ;
+	  s[4*1+m] = Sph[m]*Sth[n] ;
+	  s[4*2+m] = Cph[m] ;
+	}
+	triangle_det4(s, rdvx, rdvy, rdvz, re2q, r2) ;
+	
+	blaswrap_dgemm(TRUE, FALSE, i4, i3, i3, d1, s, i4, A, i3, d0, sg, i3) ;
+      
+	for ( m = 0 ; m < 4 ; m ++ ) {
+	  r2[m] = fabs(r2[m]) ;
+#ifdef TRANSFORM_PHI
+	  wj = wth[i+n]*wph[j+m]*dtp*dth*0.5*r2[m] ;
+#else /*TRANSFORM_PHI*/
+	  wj = Sph[m]*wth[i+n]*wph[j+m]*dph*dth*0.5*r2[m] ;
+#endif /*TRANSFORM_PHI*/
+	  
+	  for ( k = 0 ; k < nr ; k ++ ) {
+	    r = 0.5*r2[m]*(1.0 + qr[k]) ;
+	    /*global coordinate system*/
+	    yg[0] = r*sg[3*m+0] + xs[0] ; 
+	    yg[1] = r*sg[3*m+1] + xs[1] ; 
+	    yg[2] = r*sg[3*m+2] + xs[2] ; 
+	    wt = r*r*wr[k]*wj ;
+	    qfunc(yg, &(sg[3*m]), r, wt, q, nq, qdata) ;
+	  }
+	}      
+      }
+    }
+  }
   
   return 0 ;
 }
+#endif /*HAVE_AVX_INSTRUCTIONS*/
 
-gint zero_points(gdouble *x, gdouble tol, gint n)
+static void zero_points(gdouble *x, gdouble tol, gint n)
 
 {
   gint i ;
 
   for ( i = 0 ; i < n ; i ++ ) if ( fabs(x[i]) < tol ) x[i] = 0.0 ;
   
-  return 0 ;
+  return ;
 }
 
-gint tet_quad_origin_th(gdouble *x, gdouble *xs,
+static gint tet_quad_origin_th(gdouble *x, gdouble *xs,
 			       gdouble *qph, gint qpstr, gdouble *wph,
 			       gint wpstr, gint nph,
 			       gdouble *qth, gint qtstr, gdouble *wth,
@@ -426,14 +744,9 @@ gint tet_quad_origin_th(gdouble *x, gdouble *xs,
   /*tetrahedron nodes in rotated coordinate system*/
   multiply_matrices3x3(xr, x, A, TRUE) ;  
 
-  zero_points(xr, 1e-15, 9) ;
+  zero_points(xr, TOL_ZERO, 9) ;
   
   order_points(xr, perm) ;
-  
-  /* fprintf(stderr, "xr = [%lg %lg %lg\n%lg %lg %lg\n%lg %lg %lg] ;\n", */
-  /* 	  xr[3*perm[0]+0], xr[3*perm[0]+1], xr[3*perm[0]+2], */
-  /* 	  xr[3*perm[1]+0], xr[3*perm[1]+1], xr[3*perm[1]+2], */
-  /* 	  xr[3*perm[2]+0], xr[3*perm[2]+1], xr[3*perm[2]+2]) ; */
   
   /*find \theta limits and corresponding line segments*/
   for ( i = 0 ; i < 3 ; i ++ ) {
@@ -441,7 +754,6 @@ gint tet_quad_origin_th(gdouble *x, gdouble *xs,
   }
 
   if ( BETWEEN(th[perm[2]], th[perm[0]], th[perm[1]]) ) {
-    /* fprintf(stderr, "between\n") ; */
     thlim[0] = th[perm[0]] ; thlim[1] = th[perm[2]] ;
     bounds[0] = perm[0] ; bounds[1] = perm[1] ; 
     bounds[2] = perm[0] ; bounds[3] = perm[2] ; 
@@ -450,7 +762,6 @@ gint tet_quad_origin_th(gdouble *x, gdouble *xs,
     bounds[4] = perm[0] ; bounds[5] = perm[1] ; 
     bounds[6] = perm[1] ; bounds[7] = perm[2] ; 
   } else {
-    /* fprintf(stderr, "outside\n") ; */
     thlim[0] = th[perm[0]] ; thlim[1] = th[perm[1]] ;
     bounds[0] = perm[0] ; bounds[1] = perm[1] ; 
     bounds[2] = perm[0] ; bounds[3] = perm[2] ; 
@@ -460,70 +771,76 @@ gint tet_quad_origin_th(gdouble *x, gdouble *xs,
     bounds[6] = perm[0] ; bounds[7] = perm[2] ; 
   }
 
-  /* fprintf(stderr, "subtet 1\n") ; */
-  /* bounds[0] = 0 ; bounds[1] = 1 ; */
-  /* bounds[2] = 2 ; bounds[3] = 1 ; */
+#ifdef HAVE_AVX_INSTRUCTIONS
   
-  i = subtet_quad_th(xr, xs, thlim[0], thlim[1],
-		     bounds[0], bounds[1], bounds[2], bounds[3],
-		     qph, qpstr, wph, wpstr, nph,
-		     qth, qtstr, wth, wtstr, nth,
-		     qr,  qrstr, wr,  wrstr, nr,
-		     qfunc, qdata,
-		     q, nq, A) ;
+  i = subtet_quad_th_avx(xr, xs, thlim[0], thlim[1],
+			 bounds[0], bounds[1], bounds[2], bounds[3],
+			 qph, qpstr, wph, wpstr, nph,
+			 qth, qtstr, wth, wtstr, nth,
+			 qr,  qrstr, wr,  wrstr, nr,
+			 qfunc, qdata,
+			 q, nq, A) ;
   if ( i != 0 ) return 1 ;
-  /* return 0 ; */
-  /* fprintf(stderr, "subtet 2\n") ; */
-  i = subtet_quad_th(xr, xs, thlim[2], thlim[3],
-		     bounds[4], bounds[5], bounds[6], bounds[7],
-		     qph, qpstr, wph, wpstr, nph,
-		     qth, qtstr, wth, wtstr, nth,
-		     qr,  qrstr, wr,  wrstr, nr,
-		     qfunc, qdata,
-		     q, nq, A) ;
+
+  i = subtet_quad_th_avx(xr, xs, thlim[2], thlim[3],
+			 bounds[4], bounds[5], bounds[6], bounds[7],
+			 qph, qpstr, wph, wpstr, nph,
+			 qth, qtstr, wth, wtstr, nth,
+			 qr,  qrstr, wr,  wrstr, nr,
+			 qfunc, qdata,
+			 q, nq, A) ;
   if ( i != 0 ) return 2 ;
+#else /*HAVE_AVX_INSTRUCTIONS*/
+  i = subtet_quad_th(xr, xs, thlim[0], thlim[1],
+  		     bounds[0], bounds[1], bounds[2], bounds[3],
+  		     qph, qpstr, wph, wpstr, nph,
+  		     qth, qtstr, wth, wtstr, nth,
+  		     qr,  qrstr, wr,  wrstr, nr,
+  		     qfunc, qdata,
+  		     q, nq, A) ;
+  if ( i != 0 ) return 1 ;
+
+  i = subtet_quad_th(xr, xs, thlim[2], thlim[3],
+  		     bounds[4], bounds[5], bounds[6], bounds[7],
+  		     qph, qpstr, wph, wpstr, nph,
+  		     qth, qtstr, wth, wtstr, nth,
+  		     qr,  qrstr, wr,  wrstr, nr,
+  		     qfunc, qdata,
+  		     q, nq, A) ;
+  if ( i != 0 ) return 2 ;
+#endif /*HAVE_AVX_INSTRUCTIONS*/
   
   return 0 ;
 }
 
-gdouble select_rotation(gdouble *xr, gdouble *th, gdouble *dih,
-			gint j, gint k)
+static gdouble select_rotation(gdouble *xr, gdouble *th, gint j, gint k)
 
 {
   gdouble thr, xb[2], dth ;
 
   /*check quadrants*/
   if ( xr[3*j+2] >= 0 && xr[3*k+2] >= 0 ) {
-    /* g_assert_not_reached() ;  */
     thr = -th[j] + 0.5*M_PI ;
     g_assert(th[k] + thr > -0.5*M_PI) ;
     return thr ;
   }
 
   if ( xr[3*j+2] >= 0 && xr[3*k+2] < 0 ) {
-    /* g_assert_not_reached() ;  */
-    /* thr = -0.5*M_PI - th[k] ; */
     thr = -0.5*M_PI - th[j] ;
-    /* g_assert(th[j] + thr < 0.5*M_PI) ; */
-    /* if ( th[j] + thr > 0.5*M_PI ) { */
     dth = th[k] + thr ;
     if ( dth < -0.5*M_PI ) dth += 2.0*M_PI ;
-    if ( dth >  0.5*M_PI+1e-12 ||
-	 dth < -0.5*M_PI-1e-12 ) {
-    
-    /* if ( th[k] + thr >  0.5*M_PI+1e-12 || */
-    /* 	 th[k] + thr < -0.5*M_PI-1e-12 ) { */
+    if ( dth >  0.5*M_PI+TOL_ZERO ||
+	 dth < -0.5*M_PI-TOL_ZERO ) {
+
       thr += M_PI ;
     }
     return thr ;
   }
 
   if ( xr[3*j+2] < 0 && xr[3*k+2] >= 0 ) {
-    /* g_assert_not_reached() ;  */
     thr = -th[j] - 0.5*M_PI ;
     if ( th[k] + thr >  0.5*M_PI ||
 	 th[k] + thr < -0.5*M_PI ) {
-    /* if ( th[k] + thr > 0.5*M_PI ) { */
       thr += M_PI ;
     }
     
@@ -531,7 +848,6 @@ gdouble select_rotation(gdouble *xr, gdouble *th, gdouble *dih,
   }
 
   if ( xr[3*j+2] < 0 && xr[3*k+2] < 0 ) {
-    /* g_assert_not_reached() ;  */
     thr = -th[j] - 0.5*M_PI ;
     /*check node k*/
     g_assert ( th[k] + thr <= 0.5*M_PI ) ;
@@ -548,172 +864,69 @@ gdouble select_rotation(gdouble *xr, gdouble *th, gdouble *dih,
   return thr ;
 }
   
-gint matrix_define(gdouble *x, gdouble *A, gint *p)
+static gint matrix_define(gdouble *x, gdouble *A, gint *p)
 
 {
-  gdouble th, thmin, xr[9], dih[3], ph[3], phr ;
+  gdouble xr[9], ph[3], phr ;
   gint i, j, k, idih[3] ;
 
-  tq_tet_dihedral_angles(&(x[3*0]), &(x[3*1]), &(x[3*2]),
-  			 &(dih[0]), &(dih[1]), &(dih[2]),
-  			 NULL, NULL, NULL) ;
+  /* tq_tet_dihedral_angles(&(x[3*0]), &(x[3*1]), &(x[3*2]), */
+  /* 			 &(dih[0]), &(dih[1]), &(dih[2]), */
+  /* 			 NULL, NULL, NULL) ; */
 
-  if ( index_sort3(dih, idih) != 0 ) {
-    fprintf(stderr, "dihedral error:") ;
-    fprintf(stderr,
-	    "%lg %lg %lg\n"
-	    "%lg %lg %lg\n"
-	    "%lg %lg %lg\n",
-	    x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8]) ;
-  }
-  /* fprintf(stderr, "dih: %d %d %d\n", idih[0], idih[1], idih[2]) ; */
+  idih[0] = 0 ; idih[1] = 1 ; idih[2] = 2 ; 
+  
+  /* if ( index_sort3(dih, idih) != 0 ) { */
+  /*   fprintf(stderr, "dihedral error:") ; */
+  /*   fprintf(stderr, */
+  /* 	    "%lg %lg %lg\n" */
+  /* 	    "%lg %lg %lg\n" */
+  /* 	    "%lg %lg %lg\n", */
+  /* 	    x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8]) ; */
+  /* } */
+
   /*align the edge with largest dihedral with the x axis*/
   i = idih[2] ; j = idih[0] ; k = idih[1] ;
   /*rotate to bring node to z==0*/
   rotation_y(atan2(x[3*i+2], x[3*i+0]), A) ;
   
   multiply_matrices3x3(xr, x, A, TRUE) ;
-  /* return 0 ; */
 
   /*rotate to bring node to y==0*/
   rotation_z(-atan2(xr[3*i+1], xr[3*i+0]), A) ;
   
   multiply_matrices3x3(xr, x, A, TRUE) ;
 
-  if ( xr[3*0+1] > -1e-12 &&
-       xr[3*1+1] > -1e-12 &&
-       xr[3*2+1] > -1e-12 ) return 0 ;
-
-  /*check for points with negative y*/
-  ph[0] = atan2(xr[3*0+2], xr[3*0+1]) ;
-  ph[1] = atan2(xr[3*1+2], xr[3*1+1]) ;
-  ph[2] = atan2(xr[3*2+2], xr[3*2+1]) ;
+  if ( xr[3*0+1] > -TOL_ZERO &&
+       xr[3*1+1] > -TOL_ZERO &&
+       xr[3*2+1] > -TOL_ZERO ) return 0 ;
 
   /* fprintf(stderr, "negative y (%lg, %lg, %lg)\n", ph[0], ph[1], ph[2]) ; */
 
-  if ( xr[3*j+1] < -1e-12 && xr[3*k+1] < -1e-12 ) {
+  if ( xr[3*j+1] < -TOL_ZERO && xr[3*k+1] < -TOL_ZERO ) {
     /*both values of y negative, easier to make a 180 or a reflection*/
     /* fprintf(stderr, "flipping\n") ; */
-    /* g_assert_not_reached() ; /\*unchecked code*\/ */
     rotation_x(M_PI, A) ;
 
     return 0 ;
   }
 
-  if ( xr[3*k+1] < -1e-12 ) {
-    phr = select_rotation(xr, ph, dih, k, j) ;
+  /* check for points with negative y */
+  ph[0] = atan2(xr[3*0+2], xr[3*0+1]) ;
+  ph[1] = atan2(xr[3*1+2], xr[3*1+1]) ;
+  ph[2] = atan2(xr[3*2+2], xr[3*2+1]) ;
+
+  if ( xr[3*k+1] < -TOL_ZERO ) {
+    phr = select_rotation(xr, ph, k, j) ;
   } else {
-    phr = select_rotation(xr, ph, dih, j, k) ;
+    phr = select_rotation(xr, ph, j, k) ;
   }
-  
-  /* if ( xr[3*k+1] < -1e-12 ) { */
-  /*   phr = -ph[k] + 0.5*dih[k] ; */
-  /*   if ( xr[3*k+2] <= 0.0 ) phr -= 0.5*M_PI ; */
-  /* } */
-  /* if ( xr[3*j+1] < -1e-12 ) { */
-  /*   phr = -ph[j] + 0.5*dih[j] ; */
-  /*   if ( xr[3*j+2] <= 0.0 ) phr -= 0.5*M_PI ; */
-  /* } */
   
   /*rotate to bring node to x==0*/
   rotation_x(phr, A) ;
   
   multiply_matrices3x3(xr, x, A, TRUE) ;
 
-  return 0 ;
-  
-  /* i = p[0] ; j = p[1] ; k = p[2] ; */
-  /* /\* fprintf(stderr, "%d %d %d\n", i, j, k) ; *\/ */
-  /* /\*rotate to bring node to z==0*\/ */
-  /* rotation_y(atan2(x[3*i+2], x[3*i+0]), A) ; */
-  
-  /* multiply_matrices3x3(xr, x, A, TRUE) ; */
-  /* /\* return 0 ; *\/ */
-
-  /* /\*rotate to bring node to y==0*\/ */
-  /* rotation_z(-atan2(xr[3*i+1], xr[3*i+0]), A) ; */
-  
-  /* multiply_matrices3x3(xr, x, A, TRUE) ; */
-  /* /\*rotate to bring one more node to z==0*\/ */
-  /* rotation_x(-atan2(xr[3*j+2], xr[3*j+1]), A) ; */
-  
-  /* multiply_matrices3x3(xr, x, A, TRUE) ; */
-
-  /* /\*check for negative theta*\/ */
-  /* thmin = 0.0 ; */
-  /* for ( i = 0 ; i < 3 ; i ++ ) { */
-  /*   th = atan2(xr[3*i+1], xr[3*i+0]) ; */
-  /*   if ( th < 0.0 ) thmin = MIN(thmin, th) ; */
-  /* } */
-
-  /* if ( thmin < 0.0 ) { */
-  /*   rotation_z(-thmin, A) ; */
-  
-  /*   multiply_matrices3x3(xr, x, A, TRUE) ; */
-  /* } */
-  
-  /* /\* return 0 ; *\/ */
-  
-  /* /\*check all y are positive (to tolerance)*\/ */
-  /* if ( xr[3*j+1] > -1e-12 && xr[3*k+1] > -1e-12 ) return 0 ; */
-
-  /* if ( xr[3*j+1] < -1e-12 && xr[3*k+1] < -1e-12 ) { */
-  /*   /\*flip in y*\/ */
-  /*   fprintf(stderr, "flip\n") ; */
-  /*   A[3] *= -1 ; A[4] *= -1 ; A[5] *= -1 ;     */
-  /*   return 0 ; */
-  /* } */
-
-  /* /\*one y is negative, one is positive*\/ */
-  /* if ( xr[3*j+1] < -1e-12 ) { */
-  /*   /\* th = atan2(xr[3*j+2], xr[3*j+0]) ; *\/ */
-  /*   th = atan2(xr[3*j+1], xr[3*j+2]) ; */
-  /* } else { */
-  /*   /\* th = atan2(xr[3*k+2], xr[3*k+0]) ; *\/ */
-  /*   th = atan2(xr[3*k+1], xr[3*k+2]) ; */
-  /* } */
-  
-  /* rotation_x(th, A) ; */
-
-  /* multiply_matrices3x3(xr, x, A, TRUE) ; */
-
-  /* thmin = 0.0 ; */
-  /* for ( i = 0 ; i < 3 ; i ++ ) { */
-  /*   th = atan2(xr[3*i+1], xr[3*i+0]) ; */
-  /*   if ( th < 0.0 ) thmin = MIN(thmin, th) ; */
-  /* } */
-
-  /* if ( thmin < 0.0 ) { */
-  /*   rotation_z(-thmin, A) ; */
-  
-  /*   multiply_matrices3x3(xr, x, A, TRUE) ; */
-  /* } */
-
-  
-  /* if ( xr[3*j+1] < -1e-12 ) { */
-  /*   th = atan2(xr[3*j+2], xr[3*j+0]) ; */
-  /* } else { */
-  /*   th = atan2(xr[3*k+2], xr[3*k+0]) ; */
-  /* } */
-  
-  /* rotation_x(-th, A) ; */
-
-  /* multiply_matrices3x3(xr, x, A, TRUE) ; */
-  
-  /* if ( xr[3*j+1] < -1e-12 ) { */
-  /*   th = atan2(xr[3*j+1], xr[3*j+0]) ; */
-  /* } else { */
-  /*   th = atan2(xr[3*k+1], xr[3*k+0]) ; */
-  /* } */
-  
-  /* rotation_z(-th, A) ; */
-
-  /* multiply_matrices3x3(xr, x, A, TRUE) ; */
-
-  if ( xr[3*0+1] < -1e-12 ) return 1 ;
-  if ( xr[3*1+1] < -1e-12 ) return 2 ;
-  if ( xr[3*2+1] < -1e-12 ) return 3 ;
-  
   return 0 ;
 }
 
@@ -728,21 +941,10 @@ gint tq_transform_matrix(gdouble *x, gdouble *A)
     A[0] = 1.0 ; A[1] = 0.0 ; A[2] = 0.0 ;
     A[3] = 0.0 ; A[4] = 1.0 ; A[5] = 0.0 ;
     A[6] = 0.0 ; A[7] = 0.0 ; A[8] = 1.0 ;
-
-    /* if ( matrix_define(x, A, p) == 0 ) return 0 ; */
-
-    /* if ( matrix_define(x, A, &(p[3*(2-i)])) == 0 ) { */
-    /*   fprintf(stderr, "perm: %d\n", 2-i) ; */
-    /*   return 0 ; */
-    /* } */
     if ( matrix_define(x, A, &(p[3*i])) == 0 ) return 0 ;
   }
 
     g_assert_not_reached() ;
-    
-    /* g_assert(xr[3*0+1] > -1e-12) ; */
-    /* g_assert(xr[3*1+1] > -1e-12) ; */
-    /* g_assert(xr[3*2+1] > -1e-12) ; */
   
   return 0 ;
 }
