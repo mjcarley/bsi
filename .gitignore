@@ -15,6 +15,11 @@
 *.msh
 *.node
 
+## profiling data
+gmon.out
+## run logs
+logs
+
 ## scratch directory
 scratch
 quadratures
