@@ -45,19 +45,16 @@
    ((_a)[1] - (_b)[1])*((_a)[1] - (_b)[1]) +	\
    ((_a)[2] - (_b)[2])*((_a)[2] - (_b)[2]))
 
+/*a.(c-b)*/
+#define tq_vector_diff_scalar(_a,_b,_c)				\
+  (((_a)[0])*((_c)[0]-(_b)[0]) +				\
+   ((_a)[1])*((_c)[1]-(_b)[1]) +				\
+   ((_a)[2])*((_c)[2]-(_b)[2]))
+
+
 typedef gint (*tq_tetquad_func_t)(gdouble *y, gdouble *s,
 				  gdouble R, gdouble wt,
 				  gdouble *q, gint nq, gpointer data) ;
-
-/* gint tet_quad_origin(gdouble *x, gdouble *xs, */
-/* 		     gdouble *qph, gint qpstr, gdouble *wph, gint wpstr, */
-/* 		     gint nph, */
-/* 		     gdouble *qth, gint qtstr, gdouble *wth, gint wtstr, */
-/* 		     gint nth, */
-/* 		     gdouble *qr, gint qrstr, gdouble *wr, gint wrstr, */
-/* 		     gint nr, */
-/* 		     tq_tetquad_func_t qfunc, gpointer qdata, */
-/* 		     gdouble *q, gint nq, gdouble *A) ; */
 
 gint tq_tet_quad(gdouble *x1, gdouble *x2, gdouble *x3, gdouble *x4,
 		 gdouble *qph, gint qpstr, gdouble *wph, gint wpstr,

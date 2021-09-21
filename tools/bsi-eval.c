@@ -136,6 +136,8 @@ static gint tetrahedron_bs_func(gdouble *y, gdouble *s, gdouble R,
   /* bsi_polynomial_t *p = data[0] ; */
   gdouble rw[3], w[3] ;
 
+  wt *= 0.25*M_1_PI/(R*R) ;
+  
   /*vector s is the unit vector from the evaluation point to the
     quadrature point (Rs = y-x)*/
   
@@ -143,11 +145,13 @@ static gint tetrahedron_bs_func(gdouble *y, gdouble *s, gdouble R,
 
   bsi_source_func_ring_gaussian(y, w, 3, NULL) ;
   tq_vector_cross(rw, w, s) ;
-  /* tq_vector_cross(rw, s, w) ; */
 
-  u[0] -= rw[0]/R/R*0.25*M_1_PI*wt ;
-  u[1] -= rw[1]/R/R*0.25*M_1_PI*wt ;
-  u[2] -= rw[2]/R/R*0.25*M_1_PI*wt ;
+  /* u[0] -= rw[0]/R/R*0.25*M_1_PI*wt ; */
+  /* u[1] -= rw[1]/R/R*0.25*M_1_PI*wt ; */
+  /* u[2] -= rw[2]/R/R*0.25*M_1_PI*wt ; */
+  u[0] -= rw[0]*wt ;
+  u[1] -= rw[1]*wt ;
+  u[2] -= rw[2]*wt ;
 
   return 0 ;
 }
@@ -481,13 +485,14 @@ gint main(gint argc, gchar **argv)
   /* mop_logging_init(stderr, "", G_LOG_LEVEL_DEBUG, NULL) ;   */
 
   /*global quadrature*/
-  order = 2 ;
+  order = 3 ;
 
   /*local quadratures*/
   /* ngp = 16 ; ngt = 16 ; ngr = 16 ; */
   /* ngp = 12 ; ngt = 12 ; ngr = 12 ; */
   /* ngp = 8 ; ngt = 8 ; ngr = 8 ; */
   ngp = 4 ; ngt = 4 ; ngr = 4 ;
+  /* ngp = 2 ; ngt = 2 ; ngr = 2 ; */
   /* ngp = 1 ; ngt = 2 ; ngr = 2 ; */
   
   /*tree parameters*/
